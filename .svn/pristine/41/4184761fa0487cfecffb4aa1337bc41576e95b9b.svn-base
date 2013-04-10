@@ -1,4 +1,0 @@
-begin() then
-	float n = 123.4.5;
-	print("Ola mundo!");
-end
