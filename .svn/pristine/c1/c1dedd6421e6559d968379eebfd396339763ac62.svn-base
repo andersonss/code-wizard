@@ -1,0 +1,9 @@
+package br.ufal.ic.compiladores.tabela;
+
+import java.util.HashMap;
+
+public class TabelaDeSimbolo {
+
+	public static HashMap<String, String> tabelaDeSimbolos = new HashMap<String, String>();
+
+}

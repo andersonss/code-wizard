@@ -1,0 +1,20 @@
+begin(int numbers[], int n) do
+	int m = n/2;
+	int i, j, k;
+	bool t = true;
+
+	while(m > 0) do
+		for(i = m ; i < n; i = i +1 ) do
+			k = number[i];
+			j = i;
+			
+			while(j >= m && numbers[j - m] > k) do
+				numbers[j] = numbers[j - m];
+				j = j - m;
+			end
+			
+			numbers[j] = k;
+		end
+		m = m/2;
+	end
+end

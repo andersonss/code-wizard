@@ -1,0 +1,6 @@
+int testarMetodo() do
+	x = test[10] # getNumber() # "hahaha" # 10;
+	test();
+	return x;
+end
+

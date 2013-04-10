@@ -1,0 +1,94 @@
+package br.ufal.ic.compiladores;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import br.ufal.ic.compiladores.tabela.TabelaDeSimbolo;
+import br.ufal.ic.compiladores.tabela.TabelaInterna;
+import br.ufal.ic.compiladores.token.ClasseToken;
+import br.ufal.ic.compiladores.token.Token;
+
+/**
+ * 
+ * Retorna o Token contendo o lexema, classe, valor e posição.
+ * 
+ */
+public class AnalisadorLexico {
+
+	private static int posLinha = 1;
+	private static int posColuna = 1;
+	private static BufferedReader buffer;
+	private static TabelaDeSimbolo tabelaDeSimbolos;
+	private static char EOL = System.getProperty("line.separator")
+			.toCharArray()[0];
+	private static char EOF = (char) -1;
+	private static char charBuff;
+
+	/**
+	 * 
+	 * @param buffer
+	 * @throws IOException
+	 */
+	public AnalisadorLexico(BufferedReader buffer) throws IOException {
+		this.buffer = buffer;
+		this.tabelaDeSimbolos = new TabelaDeSimbolo();
+		charBuff = (char) buffer.read();
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public Token nextToken() throws IOException {
+		if (charBuff == EOF)
+			return null;
+
+		int posXInit;
+		int posYInit;
+		ClasseToken classe = null;
+		String lexema = "";
+
+		// percorre até encontrar algo diferente de espaço ou enter.
+		while (EOL == charBuff || Character.isWhitespace(charBuff))
+			if (EOL == charBuff) {
+				posLinha++;
+				posColuna = 1;
+				charBuff = (char) buffer.read();
+			} else {
+				posColuna++;
+				charBuff = (char) buffer.read();
+			}
+
+		// posicao do token
+		posXInit = posColuna;
+		posYInit = posLinha;
+
+		if (Character.isLetterOrDigit(charBuff)) {
+			boolean check = false;
+			while (Character.isLetterOrDigit(charBuff) || charBuff == '.') {
+				if (charBuff == '.' && check == false)
+					check = true;
+				else if (check == true && charBuff == '.')
+					System.out.println("ERROR");
+
+				lexema += charBuff;
+				posColuna++;
+				charBuff = (char) buffer.read();
+				System.out.println(lexema);
+			}
+		} else {
+			lexema += charBuff;
+			posColuna++;
+			charBuff = (char) buffer.read();
+		}
+
+		classe = TabelaInterna.getTokenClass(lexema);
+		if (classe == null)
+			if (Character.isLetter(lexema.charAt(0)))
+				classe = ClasseToken.ID;
+			else
+				classe = ClasseToken.CONST_NUM;
+		return new Token(lexema, classe, lexema, posYInit, posXInit);
+	}
+}
