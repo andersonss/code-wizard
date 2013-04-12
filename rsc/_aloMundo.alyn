@@ -1,3 +1,0 @@
-begin() do
-	print("Ola mundo!");
-end

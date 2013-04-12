@@ -29,7 +29,7 @@ public class AnalisadorSintatico {
 	public void runAnaliseSintatica() throws UndefinedSintaxeException {
 		lerProximoToken();
 		while (token != null) {
-			if (token.getClasseToken() == ClasseToken.FUNC_BEGIN) {
+			if (token.getClasseToken() == ClasseToken.FUNC_MAIN) {
 				lerProximoToken();
 				analisarBloco();
 			} else if (token.getClasseToken() == ClasseToken.VOID) {
@@ -58,7 +58,7 @@ public class AnalisadorSintatico {
 					}
 				}
 			}
-			if (token.getClasseToken() == ClasseToken.END) {
+			if (token.getClasseToken() == ClasseToken.FCHAVE) {
 				lerProximoToken();
 			} else {
 				throw new UndefinedSintaxeException(token.toString());
@@ -79,7 +79,7 @@ public class AnalisadorSintatico {
 			dclParamList();
 			if (token.getClasseToken() == ClasseToken.FPARENTESE) {
 				lerProximoToken();
-				if (token.getClasseToken() == ClasseToken.DO) {
+				if (token.getClasseToken() == ClasseToken.ACHAVE) {
 					lerProximoToken();
 					instucaoList();
 				} else {
@@ -126,7 +126,7 @@ public class AnalisadorSintatico {
 			instrucaoFor();
 			instucaoList();
 			break;
-		case FUNC_PRINT:
+		case FUNC_PRINTF:
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.APARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());
@@ -135,7 +135,7 @@ public class AnalisadorSintatico {
 			funcaoImprimir();
 			instucaoList();
 			break;
-		case FUNC_READ:
+		case FUNC_SCANF:
 			lerProximoToken();
 			funcaoLer();
 			instucaoList();
@@ -209,10 +209,10 @@ public class AnalisadorSintatico {
 					instrucaoAtribuicaoInstrucaoFor();
 					if (token.getClasseToken() == ClasseToken.FPARENTESE) {
 						lerProximoToken();
-						if (token.getClasseToken() == ClasseToken.DO) {
+						if (token.getClasseToken() == ClasseToken.ACHAVE) {
 							lerProximoToken();
 							instucaoList();
-							if (token.getClasseToken() != ClasseToken.END) {
+							if (token.getClasseToken() != ClasseToken.FCHAVE) {
 								throw new UndefinedSintaxeException(
 										token.toString());
 							}
@@ -262,10 +262,10 @@ public class AnalisadorSintatico {
 	 */
 	private void instrucaoWhile() {
 		exprLogica();
-		if (token.getClasseToken() == ClasseToken.DO) {
+		if (token.getClasseToken() == ClasseToken.ACHAVE) {
 			lerProximoToken();
 			instucaoList();
-			if (token.getClasseToken() != ClasseToken.END) {
+			if (token.getClasseToken() != ClasseToken.FCHAVE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
 			lerProximoToken();
@@ -279,17 +279,17 @@ public class AnalisadorSintatico {
 	 */
 	private void instrucaoIf() {
 		exprLogica();
-		if (token.getClasseToken() == ClasseToken.DO) {
+		if (token.getClasseToken() == ClasseToken.ACHAVE) {
 			lerProximoToken();
 			instucaoList();
 			if (token.getClasseToken() == ClasseToken.ELSE) {
 				lerProximoToken();
 				instucaoList();
-				if (token.getClasseToken() != ClasseToken.END) {
+				if (token.getClasseToken() != ClasseToken.FCHAVE) {
 					throw new UndefinedSintaxeException(token.toString());
 				}
 				lerProximoToken();
-			} else if (token.getClasseToken() != ClasseToken.END) {
+			} else if (token.getClasseToken() != ClasseToken.FCHAVE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
 		} else {
@@ -414,7 +414,7 @@ public class AnalisadorSintatico {
 	 * Concatenacao esta aceitando mais tipos do que definida na EBNF, ja que uma funcao mais completa eh melhor...
 	 */
 	private void exprCadeiaCaracter() {
-		if (token.getClasseToken() == ClasseToken.OP_CONCATENACAO) {
+		if (token.getClasseToken() == ClasseToken.PREPROCESSADOR) {
 			lerProximoToken();
 			fatorAritmetico();
 			exprCadeiaCaracter();

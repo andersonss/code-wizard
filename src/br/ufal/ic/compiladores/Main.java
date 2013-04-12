@@ -14,60 +14,61 @@ import br.ufal.ic.compiladores.token.Token;
 
 public class Main {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
 
-		List<String> path = new ArrayList<String>();
-		path.add("rsc/_aloMundo.alyn");
-		path.add("rsc/_fibonacci.alyn");
-		path.add("rsc/_shellsort.alyn");
-		path.add("rsc/test.txt");
+	List<String> path = new ArrayList<String>();
+	path.add("rsc/3-numeros-em-ordem-crescente.c");
+	path.add("rsc/ClassificacaoTriangulos1.c");
+	path.add("rsc/ClassificacaoTriangulos2.c");
+	path.add("rsc/figurinhas-dos-irmaos.c");
+	path.add("rsc/soma-fracoes.c");
 
-		
-		//Rodar apenas a analise lexica ou a analise sintatica!
-		//rodarAnaliseLexica(path);
-		rodarAnaliseSintatica(path);
+	// Rodar apenas a analise lexica ou a analise sintatica!
+	rodarAnaliseLexica(path);
+	// rodarAnaliseSintatica(path);
 
+    }
 
+    private static void rodarAnaliseSintatica(List<String> path) {
+	try {
+	    FileReader reader = new FileReader(new File(path.get(1)));
+	    BufferedReader buffer = new BufferedReader(reader);
+	    AnalisadorLexico.setBuffer(buffer);
+	    AnalisadorSintatico analisador = new AnalisadorSintatico();
+	    analisador.runAnaliseSintatica();
+	} catch (FileNotFoundException e) {
+	    System.err.println("Arquivo Nao Encontrado!");
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    System.err.println("Erro na leitura do arquivo!");
+	} catch (UndefinedSintaxeException e) {
+	    e.printStackTrace();
+	    System.err
+		    .println("\n** Falha na analise sintatica! **\n->Programa nao reconhecido!\nAlguma outra coisa esperada no lugar de "
+			    + e.getMessage());
+	}
+    }
+
+    private static void rodarAnaliseLexica(List<String> path) {
+	try {
+	    FileReader reader = new FileReader(new File(path.get(4)));
+	    BufferedReader buffer = new BufferedReader(reader);
+	    AnalisadorLexico.setBuffer(buffer);
+	    Token token = AnalisadorLexico.nextToken();
+	    while (token != null) {
+		System.out.println(token);
+		token = AnalisadorLexico.nextToken();
+	    }
+	} catch (FileNotFoundException e) {
+	    System.err.println("Arquivo Nao Encontrador!");
+	} catch (IOException e) {
+	    System.err.println("Erro na leitura do arquivo!");
+	} catch (UndefinedTokenException e) {
+	    System.err.println("Token Invalido! " + e.getMessage());
 	}
 
-	private static void rodarAnaliseSintatica(List<String> path) {
-		try {
-			FileReader reader = new FileReader(new File(path.get(3)));
-			BufferedReader buffer = new BufferedReader(reader);
-			AnalisadorLexico.setBuffer(buffer);
-			AnalisadorSintatico analisador = new AnalisadorSintatico();
-			analisador.runAnaliseSintatica();
-		} catch (FileNotFoundException e) {
-			System.err.println("Arquivo Nao Encontrado!");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.err.println("Erro na leitura do arquivo!");
-		} catch (UndefinedSintaxeException e){
-			e.printStackTrace();
-			System.err.println("\n** Falha na analise sintatica! **\n->Programa nao reconhecido!\nAlguma outra coisa esperada no lugar de " + e.getMessage());
-		}
-	}
-
-	private static void rodarAnaliseLexica(List<String> path) {
-		try {
-			FileReader reader = new FileReader(new File(path.get(2)));
-			BufferedReader buffer = new BufferedReader(reader);
-			AnalisadorLexico.setBuffer(buffer);
-			Token token = AnalisadorLexico.nextToken();
-			while (token != null) {
-				System.out.println(token);
-				token = AnalisadorLexico.nextToken();
-			}
-		} catch (FileNotFoundException e) {
-			System.err.println("Arquivo Nao Encontrador!");
-		} catch (IOException e) {
-			System.err.println("Erro na leitura do arquivo!");
-		} catch (UndefinedTokenException e) {
-			System.err.println("Token Invalido! " + e.getMessage());
-		}
-		
-	}
+    }
 }

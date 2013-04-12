@@ -13,28 +13,28 @@ public class TabelaInterna {
 	// tipos
 	tabelaInterna.put("int", ClasseToken.TIPO);
 	tabelaInterna.put("float", ClasseToken.TIPO);
+	tabelaInterna.put("double", ClasseToken.TIPO);
 	tabelaInterna.put("char", ClasseToken.TIPO);
-	tabelaInterna.put("bool", ClasseToken.TIPO);
-	tabelaInterna.put("string", ClasseToken.TIPO);
 
 	// bool literais
 	tabelaInterna.put("false", ClasseToken.BOOLEAN);
 	tabelaInterna.put("true", ClasseToken.BOOLEAN);
 
 	// metodos proprios
-	tabelaInterna.put("begin", ClasseToken.FUNC_BEGIN);
-	tabelaInterna.put("print", ClasseToken.FUNC_PRINT);
-	tabelaInterna.put("read", ClasseToken.FUNC_READ);
+	tabelaInterna.put("main", ClasseToken.FUNC_MAIN);
+	tabelaInterna.put("printf", ClasseToken.FUNC_PRINTF);
+	tabelaInterna.put("scanf", ClasseToken.FUNC_SCANF);
 
 	// palavras chave
 	tabelaInterna.put("void", ClasseToken.VOID);
 	tabelaInterna.put("if", ClasseToken.IF);
 	tabelaInterna.put("else", ClasseToken.ELSE);
+	tabelaInterna.put("else if", ClasseToken.ELSE_IF);
 	tabelaInterna.put("for", ClasseToken.FOR);
 	tabelaInterna.put("return", ClasseToken.RETURN);
 	tabelaInterna.put("while", ClasseToken.WHILE);
-	tabelaInterna.put("do", ClasseToken.DO);
-	tabelaInterna.put("end", ClasseToken.END);
+	tabelaInterna.put("{", ClasseToken.ACHAVE);
+	tabelaInterna.put("}", ClasseToken.FCHAVE);
 
 	// separadores
 	tabelaInterna.put("[", ClasseToken.ACOLCHETE);
@@ -51,8 +51,8 @@ public class TabelaInterna {
 	// negacao
 	tabelaInterna.put("!", ClasseToken.OP_NEGACAO);
 
-	// operador concatenacao
-	tabelaInterna.put("#", ClasseToken.OP_CONCATENACAO);
+	// pre-processador
+	tabelaInterna.put("#", ClasseToken.PREPROCESSADOR);
 
 	// operadores relacionais
 	tabelaInterna.put("==", ClasseToken.OP_IGUAL_IGUAL);
@@ -65,6 +65,8 @@ public class TabelaInterna {
 	// operadores logicos
 	tabelaInterna.put("||", ClasseToken.OP_OU);
 	tabelaInterna.put("&&", ClasseToken.OP_E);
+
+	tabelaInterna.put("&", ClasseToken.OP_E_BINARIO);
 
 	// operadores aritimeticos
 	tabelaInterna.put("+", ClasseToken.OP_ADICAO);
