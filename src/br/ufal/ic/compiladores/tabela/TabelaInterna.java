@@ -68,8 +68,7 @@ public class TabelaInterna {
 		tabelaInterna.put("&&", ClasseToken.OP_E);
 
 		//operadores epesciais
-		tabelaInterna.put("&", ClasseToken.OP_E_COMERCIAL);
-		tabelaInterna.put("|", ClasseToken.OP_OU_BINARIO);
+		tabelaInterna.put("&", ClasseToken.OP_REFERENCIA);
 
 		// operadores aritimeticos
 		tabelaInterna.put("+", ClasseToken.OP_ADICAO);
@@ -77,7 +76,7 @@ public class TabelaInterna {
 		tabelaInterna.put("-", ClasseToken.OP_SUBTRACAO);
 		tabelaInterna.put("--", ClasseToken.OP_SUBTRACAO_SUBTRACAO);
 		tabelaInterna.put("/", ClasseToken.OP_DIVISAO);
-		tabelaInterna.put("*", ClasseToken.OP_MULTIPLICACAO);
+		tabelaInterna.put("*", ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA);
 		tabelaInterna.put("%", ClasseToken.OP_RESTO);
 
 	}

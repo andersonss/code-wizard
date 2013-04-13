@@ -116,6 +116,7 @@ public class AnalisadorLexico {
 					}
 				}
 			}
+			if(!clearWhiteSpace()) return null;
 
 			if (TabelaInterna.contains(lexema)) {
 				classe = TabelaInterna.getTokenClass(lexema.toLowerCase());

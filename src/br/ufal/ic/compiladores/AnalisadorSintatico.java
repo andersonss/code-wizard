@@ -32,6 +32,10 @@ public class AnalisadorSintatico {
 			if (token.getClasseToken() == ClasseToken.TIPO
 					|| token.getClasseToken() == ClasseToken.FUNC_MAIN || token.getClasseToken() == ClasseToken.VOID) {
 				lerProximoToken();
+				
+				if(token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+					lerProximoToken();
+				}
 				if (token.getClasseToken() == ClasseToken.ID_FUNCTION
 						|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
 					lerProximoToken();
@@ -129,8 +133,16 @@ public class AnalisadorSintatico {
 		case ID_FUNCTION:
 			lerProximoToken();
 			chamadaFuncao();
+			if(token.getClasseToken() != ClasseToken.PONTO_VIRGULA){
+				throw new UndefinedSintaxeException(token.toString());
+			}
+			lerProximoToken();
 			instucaoList();
 			break;
+		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
+		case OP_ADICAO_ADICAO:
+		case OP_SUBTRACAO_SUBTRACAO:
+			lerProximoToken();
 		case ID:
 			// Aqui foi fatorado a esquerda para identificar adequadamente qual
 			// producao usar..
@@ -184,7 +196,7 @@ public class AnalisadorSintatico {
 				lerProximoToken();
 				if (token.getClasseToken() == ClasseToken.VIRGULA) {
 					lerProximoToken();
-					while (token.getClasseToken() == ClasseToken.OP_E_COMERCIAL) {
+					while (token.getClasseToken() == ClasseToken.OP_REFERENCIA) {
 						lerProximoToken();
 						if (token.getClasseToken() == ClasseToken.ID) {
 							lerProximoToken();
@@ -421,6 +433,14 @@ public class AnalisadorSintatico {
 			lerProximoToken();
 			chamadaFuncao();
 			break;
+		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
+		case OP_REFERENCIA:
+			lerProximoToken();
+			if(token.getClasseToken() != ClasseToken.ID){
+				throw new UndefinedSintaxeException(token.toString());
+			}
+			lerProximoToken();
+			break;
 		case ID:
 			lerProximoToken();
 			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
@@ -439,20 +459,11 @@ public class AnalisadorSintatico {
 	}
 
 	/**
-	 * Reconhece atribucoes com arrays ou acesso ao array
-	 * 
-	 * private void arrayTerminalExpressoes() { exprAritmetica(); if
-	 * (token.getClasseToken() == ClasseToken.FCOLCHETE) { lerProximoToken(); if
-	 * (token.getClasseToken() == ClasseToken.ATRIBUICAO) { lerProximoToken();
-	 * exprLogica(); } } else { throw new
-	 * UndefinedSintaxeException(token.toString()); } }
-	 */
-
-	/**
 	 * Reconhece chamada de funcoes
 	 */
 	private void chamadaFuncao() {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
+			lerProximoToken();
 			funcParamList();
 			if (token.getClasseToken() == ClasseToken.FPARENTESE) {
 				lerProximoToken();
@@ -472,14 +483,21 @@ public class AnalisadorSintatico {
 		if (token.getClasseToken() == ClasseToken.FPARENTESE) {
 			return;
 		}
-		exprLogica();
+		if(token.getClasseToken() == ClasseToken.OP_REFERENCIA || token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+			lerProximoToken();
+			if(token.getClasseToken() != ClasseToken.ID){
+				throw new UndefinedSintaxeException(token.toString());
+			}
+			lerProximoToken();
+		}
+		else {
+			exprLogica();
+		}
 		if (token.getClasseToken() == ClasseToken.VIRGULA) {
 			lerProximoToken();
 			exprLogica();
 			funcParamList();
-
 		}
-
 	}
 
 	/**
@@ -524,6 +542,9 @@ public class AnalisadorSintatico {
 	}
 
 	private void atribuicaoAux() {
+		if(token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+			lerProximoToken();
+		}
 		if (token.getClasseToken() == ClasseToken.ID) {
 			lerProximoToken();
 			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
@@ -647,7 +668,7 @@ public class AnalisadorSintatico {
 		if (token.getClasseToken() == ClasseToken.OP_SUBTRACAO
 				|| token.getClasseToken() == ClasseToken.OP_ADICAO
 				|| token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO
-				|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
+				|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO){
 			lerProximoToken();
 		}
 		fatorAritmetico();
@@ -655,7 +676,7 @@ public class AnalisadorSintatico {
 
 	private void termoArtimeticoAux() {
 		switch (token.getClasseToken()) {
-		case OP_MULTIPLICACAO:
+		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
 		case OP_RESTO:
 		case OP_DIVISAO:
 			lerProximoToken();
@@ -672,6 +693,9 @@ public class AnalisadorSintatico {
 	private void dclParamList() {
 		if (token.getClasseToken() == ClasseToken.TIPO) {
 			lerProximoToken();
+			if(token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+				lerProximoToken();
+			}
 			if (token.getClasseToken() == ClasseToken.ID) {
 				lerProximoToken();
 				dclParam();
@@ -699,6 +723,9 @@ public class AnalisadorSintatico {
 			lerProximoToken();
 			if (token.getClasseToken() == ClasseToken.TIPO) {
 				lerProximoToken();
+				if(token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+					lerProximoToken();
+				}
 				if (token.getClasseToken() == ClasseToken.ID) {
 					lerProximoToken();
 					dclParam();

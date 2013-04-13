@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int *testando (int *x, int *y){
+	*x = 20;
+}
 int main()
 {
 
-    int g=0,d=0,j=0,m=0,n,b,k,i,a[100000],p=0,f;
+    int g=0,d=0,j=0,m=0,n,b,k,i,a[100000],p=0,f,*g;
     a[100000]=0;
+	a = &p;
     scanf("%d",&n);
     i=n-1;
+	test(&x);
     for(n=10; n>0;n--)
     {
         k=0;
@@ -15,6 +20,7 @@ int main()
         if(b==0)
         {
             n++;
+			++n;
         }
 
         if(b%2==0 && b!=0)
