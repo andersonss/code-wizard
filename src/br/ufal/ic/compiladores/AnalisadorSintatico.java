@@ -133,6 +133,14 @@ public class AnalisadorSintatico {
 			dclVariavel();
 			instucaoList();
 			break;
+		case ID_FUNCTION:
+			lerProximoToken();
+			if (token.getClasseToken() != ClasseToken.APARENTESE) {
+				throw new UndefinedSintaxeException(token.toString());
+			}
+			chamadaFuncao();
+			instucaoList();
+			break;
 		case ID:
 			// Aqui foi fatorado a esquerda para identificar adequadamente qual
 			// producao usar..
@@ -261,13 +269,13 @@ public class AnalisadorSintatico {
 	private void instrucaoFor() {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
 			lerProximoToken();
-			instrucaoAtribuicaoInstrucaoFor();
+			exprAritmetica();
 			if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
 				lerProximoToken();
 				exprLogica();
 				if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
 					lerProximoToken();
-					instrucaoAtribuicaoInstrucaoFor();
+					exprAritmetica();
 					if (token.getClasseToken() == ClasseToken.FPARENTESE) {
 						lerProximoToken();
 						if (token.getClasseToken() == ClasseToken.ACHAVE) {
@@ -297,10 +305,10 @@ public class AnalisadorSintatico {
 
 	}
 
-	/**
+	/*
 	 * Reconhece atribuicoes especificamente para isntrucoes FOR onde nao eh
 	 * permitido atribuicoes que nao sejam aritmeticas
-	 */
+	 *
 	private void instrucaoAtribuicaoInstrucaoFor() {
 		if (token.getClasseToken() == ClasseToken.ID) {
 			lerProximoToken();
@@ -316,7 +324,7 @@ public class AnalisadorSintatico {
 		} else {
 			throw new UndefinedSintaxeException(token.toString());
 		}
-	}
+	} */
 
 	/**
 	 * Reconhece a instrucao While
@@ -425,9 +433,7 @@ public class AnalisadorSintatico {
 			break;
 		case OP_NEGACAO:
 		case OP_SUBTRACAO:
-		case OP_ADICAO:
-		case OP_ADICAO_ADICAO:
-		case OP_SUBTRACAO_SUBTRACAO:
+			
 		case APARENTESE:
 			lerProximoToken();
 			exprLogica();
@@ -583,6 +589,18 @@ public class AnalisadorSintatico {
 			} else {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+		}
+	}
+	
+	private void atribuicao(){
+		if(token.getClasseToken() == ClasseToken.ID){
+			lerProximoToken();
+			if(token.getClasseToken() == ClasseToken.ATRIBUICAO){
+				lerProximoToken();
+				exprLogica();
+			}
+		} else {
+			throw new UndefinedSintaxeException(token.toString());
 		}
 	}
 
