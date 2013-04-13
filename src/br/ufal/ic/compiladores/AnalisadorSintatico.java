@@ -37,7 +37,8 @@ public class AnalisadorSintatico {
 					throw new UndefinedSintaxeException(token.toString());
 				}
 				analisarBloco();
-			} else if (token.getClasseToken() == ClasseToken.TIPO || token.getClasseToken() == ClasseToken.FUNC_MAIN) {
+			} else if (token.getClasseToken() == ClasseToken.TIPO
+					|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
 				lerProximoToken();
 				if (token.getClasseToken() == ClasseToken.ID_FUNCTION
 						|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
@@ -135,16 +136,12 @@ public class AnalisadorSintatico {
 			break;
 		case ID_FUNCTION:
 			lerProximoToken();
-			if (token.getClasseToken() != ClasseToken.APARENTESE) {
-				throw new UndefinedSintaxeException(token.toString());
-			}
 			chamadaFuncao();
 			instucaoList();
 			break;
 		case ID:
 			// Aqui foi fatorado a esquerda para identificar adequadamente qual
 			// producao usar..
-			lerProximoToken();
 			instrucaoFatoradaId();
 			instucaoList();
 			break;
@@ -269,7 +266,7 @@ public class AnalisadorSintatico {
 	private void instrucaoFor() {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
 			lerProximoToken();
-			exprAritmetica();
+			atribuicao();
 			if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
 				lerProximoToken();
 				exprLogica();
@@ -308,23 +305,15 @@ public class AnalisadorSintatico {
 	/*
 	 * Reconhece atribuicoes especificamente para isntrucoes FOR onde nao eh
 	 * permitido atribuicoes que nao sejam aritmeticas
-	 *
-	private void instrucaoAtribuicaoInstrucaoFor() {
-		if (token.getClasseToken() == ClasseToken.ID) {
-			lerProximoToken();
-			if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
-				lerProximoToken();
-				exprAritmetica();
-			} else if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
-				lerProximoToken();
-				arrayTerminalExpressoes();
-			} else {
-				throw new UndefinedSintaxeException(token.toString());
-			}
-		} else {
-			throw new UndefinedSintaxeException(token.toString());
-		}
-	} */
+	 * 
+	 * private void instrucaoAtribuicaoInstrucaoFor() { if
+	 * (token.getClasseToken() == ClasseToken.ID) { lerProximoToken(); if
+	 * (token.getClasseToken() == ClasseToken.ATRIBUICAO) { lerProximoToken();
+	 * exprAritmetica(); } else if (token.getClasseToken() ==
+	 * ClasseToken.ACOLCHETE) { lerProximoToken(); arrayTerminalExpressoes(); }
+	 * else { throw new UndefinedSintaxeException(token.toString()); } } else {
+	 * throw new UndefinedSintaxeException(token.toString()); } }
+	 */
 
 	/**
 	 * Reconhece a instrucao While
@@ -393,7 +382,7 @@ public class AnalisadorSintatico {
 	 * esquerda para a correta identificacao da instrucao
 	 */
 	private void instrucaoFatoradaId() {
-		intrucaoFatoradaIdAux();
+		atribuicao();
 		if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
 			lerProximoToken();
 		} else {
@@ -401,24 +390,18 @@ public class AnalisadorSintatico {
 		}
 	}
 
-	/**
+	/*
 	 * Distingue entre uma Funcao, Array e uma atribuicao
+	 * 
+	 * private void intrucaoFatoradaIdAux() { if (token.getClasseToken() ==
+	 * ClasseToken.APARENTESE) { lerProximoToken(); chamadaFuncao(); } else if
+	 * (token.getClasseToken() == ClasseToken.ACOLCHETE) { lerProximoToken();
+	 * arrayTerminalExpressoes(); } else if (token.getClasseToken() ==
+	 * ClasseToken.ATRIBUICAO) { lerProximoToken(); exprLogica(); } else { throw
+	 * new UndefinedSintaxeException(token.toString()); }
+	 * 
+	 * }
 	 */
-	private void intrucaoFatoradaIdAux() {
-		if (token.getClasseToken() == ClasseToken.APARENTESE) {
-			lerProximoToken();
-			chamadaFuncao();
-		} else if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
-			lerProximoToken();
-			arrayTerminalExpressoes();
-		} else if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
-			lerProximoToken();
-			exprLogica();
-		} else {
-			throw new UndefinedSintaxeException(token.toString());
-		}
-
-	}
 
 	/**
 	 * Fator aritmetico
@@ -428,12 +411,9 @@ public class AnalisadorSintatico {
 		case CADEIA_CARACTER:
 		case CARACTER:
 			lerProximoToken();
-			// reconhece concatenacao de caracteres/strings/ids
-			exprCadeiaCaracter();
 			break;
 		case OP_NEGACAO:
 		case OP_SUBTRACAO:
-			
 		case APARENTESE:
 			lerProximoToken();
 			exprLogica();
@@ -445,74 +425,50 @@ public class AnalisadorSintatico {
 		case CONST_NUM:
 			lerProximoToken();
 			break;
+		case ID_FUNCTION:
+			lerProximoToken();
+			chamadaFuncao();
+			break;
 		case ID:
 			lerProximoToken();
-			idTerminalExpressoes();
-			// reconhece concatenacao de caracteres/strings/ids
-			exprCadeiaCaracter();
+			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
+				lerProximoToken();
+				exprAritmetica();
+				if (token.getClasseToken() != ClasseToken.FCOLCHETE) {
+					throw new UndefinedSintaxeException(token.toString());
+				}
+				lerProximoToken();
+			}
 			break;
 		default:
 			throw new UndefinedSintaxeException(token.toString());
 
-		}
-	}
-
-	/**
-	 * Reconhece terminais que comecam com ID, sem possibilitar atribuicoes e
-	 * sem precisar de ; no final
-	 */
-	private void idTerminalExpressoes() {
-		switch (token.getClasseToken()) {
-		case APARENTESE:
-			lerProximoToken();
-			chamadaFuncao();
-			break;
-		case ACOLCHETE:
-			lerProximoToken();
-			arrayTerminalExpressoes();
-		default:
-			break;
 		}
 	}
 
 	/**
 	 * Reconhece atribucoes com arrays ou acesso ao array
+	 * 
+	 * private void arrayTerminalExpressoes() { exprAritmetica(); if
+	 * (token.getClasseToken() == ClasseToken.FCOLCHETE) { lerProximoToken(); if
+	 * (token.getClasseToken() == ClasseToken.ATRIBUICAO) { lerProximoToken();
+	 * exprLogica(); } } else { throw new
+	 * UndefinedSintaxeException(token.toString()); } }
 	 */
-	private void arrayTerminalExpressoes() {
-		exprAritmetica();
-		if (token.getClasseToken() == ClasseToken.FCOLCHETE) {
-			lerProximoToken();
-			if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
-				lerProximoToken();
-				exprLogica();
-			}
-		} else {
-			throw new UndefinedSintaxeException(token.toString());
-		}
-	}
 
 	/**
 	 * Reconhece chamada de funcoes
 	 */
 	private void chamadaFuncao() {
-		funcParamList();
-		if (token.getClasseToken() == ClasseToken.FPARENTESE) {
-			lerProximoToken();
+		if (token.getClasseToken() == ClasseToken.APARENTESE) {
+			funcParamList();
+			if (token.getClasseToken() == ClasseToken.FPARENTESE) {
+				lerProximoToken();
+			} else {
+				throw new UndefinedSintaxeException(token.toString());
+			}
 		} else {
 			throw new UndefinedSintaxeException(token.toString());
-		}
-	}
-
-	/**
-	 * Reconhece concatenacoes de ids,numeros,retorno de funcoes Concatenacao
-	 * esta aceitando mais tipos do que definida na EBNF, ja que uma funcao mais
-	 * completa eh melhor...
-	 */
-	private void exprCadeiaCaracter() {
-		if (token.getClasseToken() == ClasseToken.PREPROCESSADOR) {
-			lerProximoToken();
-			fatorAritmetico();
-			exprCadeiaCaracter();
 		}
 	}
 
@@ -550,30 +506,8 @@ public class AnalisadorSintatico {
 	 * Reconhece lista de variaveis
 	 */
 	private void dclList() {
-		if (token.getClasseToken() == ClasseToken.ID) {
-			lerProximoToken();
-			dclT();
-			dclL();
-		} else {
-			throw new UndefinedSintaxeException(token.toString());
-		}
-	}
-
-	/**
-	 * Declaracao da variavel, podendo ser a[] ou a = expr_logica
-	 */
-	private void dclT() {
-		if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
-			lerProximoToken();
-			exprLogica();
-			if (token.getClasseToken() != ClasseToken.FCOLCHETE) {
-				throw new UndefinedSintaxeException(token.toString());
-			}
-			lerProximoToken();
-		} else if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
-			lerProximoToken();
-			exprLogica();
-		}
+		atribuicao();
+		dclL();
 	}
 
 	/**
@@ -582,26 +516,34 @@ public class AnalisadorSintatico {
 	private void dclL() {
 		if (token.getClasseToken() == ClasseToken.VIRGULA) {
 			lerProximoToken();
-			if (token.getClasseToken() == ClasseToken.ID) {
-				lerProximoToken();
-				dclT();
-				dclL();
-			} else {
-				throw new UndefinedSintaxeException(token.toString());
-			}
+			dclList();
 		}
 	}
-	
-	private void atribuicao(){
-		if(token.getClasseToken() == ClasseToken.ID){
+
+	private void atribuicao() {
+		atribuicaoAux();
+		if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
 			lerProximoToken();
-			if(token.getClasseToken() == ClasseToken.ATRIBUICAO){
-				lerProximoToken();
-				exprLogica();
-			}
-		} else {
-			throw new UndefinedSintaxeException(token.toString());
+			exprLogica();
+		}else{
+			termoUnarioAritmeticoPos();
 		}
+
+	}
+
+	private void atribuicaoAux() {
+		if (token.getClasseToken() == ClasseToken.ID) {
+			lerProximoToken();
+			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
+				lerProximoToken();
+				exprAritmetica();
+				if (token.getClasseToken() != ClasseToken.FCOLCHETE) {
+					throw new UndefinedSintaxeException(token.toString());
+				}
+				lerProximoToken();
+			}
+		} 
+
 	}
 
 	private void exprLogica() {
@@ -691,20 +633,29 @@ public class AnalisadorSintatico {
 		case OP_SUBTRACAO:
 			lerProximoToken();
 			termoAritmetico();
-			exprAritmeticaAux();
+			exprAritmeticaAux();			
 		default:
-			break;
+			termoUnarioAritmeticoPos();
 		}
 	}
 
 	private void termoAritmetico() {
-		termoUnarioAritmetico();
+		termoUnarioAritmeticoPre();
 		termoArtimeticoAux();
 	}
+	
+	private void termoUnarioAritmeticoPos(){
+		if (token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO
+			|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
+			lerProximoToken();
+		}
+	}
 
-	private void termoUnarioAritmetico() {
-		if (token.getClasseToken() == ClasseToken.OP_SUBTRACAO || token.getClasseToken() == ClasseToken.OP_ADICAO
-			|| token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO || token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
+	private void termoUnarioAritmeticoPre() {
+		if (token.getClasseToken() == ClasseToken.OP_SUBTRACAO
+				|| token.getClasseToken() == ClasseToken.OP_ADICAO
+				|| token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO
+				|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
 			lerProximoToken();
 		}
 		fatorAritmetico();
@@ -716,7 +667,7 @@ public class AnalisadorSintatico {
 		case OP_RESTO:
 		case OP_DIVISAO:
 			lerProximoToken();
-			termoUnarioAritmetico();
+			termoUnarioAritmeticoPre();
 			termoArtimeticoAux();
 		default:
 			break;
