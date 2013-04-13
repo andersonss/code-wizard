@@ -21,20 +21,20 @@ public class Main {
 
 	List<String> path = new ArrayList<String>();
 	path.add("rsc/3-numeros-em-ordem-crescente.c");
-	path.add("rsc/ClassificacaoTriangulos1.c");
-	path.add("rsc/ClassificacaoTriangulos2.c");
+	path.add("rsc/classificacao-triangulos-1.c");
+	path.add("rsc/classificacao-triangulos-2.c");
 	path.add("rsc/figurinhas-dos-irmaos.c");
 	path.add("rsc/soma-fracoes.c");
 
 	// Rodar apenas a analise lexica ou a analise sintatica!
-	rodarAnaliseLexica(path);
-	// rodarAnaliseSintatica(path);
+	//rodarAnaliseLexica(path);
+	 rodarAnaliseSintatica(path);
 
     }
 
     private static void rodarAnaliseSintatica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(1)));
+	    FileReader reader = new FileReader(new File(path.get(3)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();

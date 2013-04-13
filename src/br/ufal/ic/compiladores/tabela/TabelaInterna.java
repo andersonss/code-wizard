@@ -22,6 +22,7 @@ public class TabelaInterna {
 
 		// metodos proprios
 		tabelaInterna.put("main", ClasseToken.FUNC_MAIN);
+		tabelaInterna.put("#include", ClasseToken.INCLUDE);
 		tabelaInterna.put("printf", ClasseToken.FUNC_PRINTF);
 		tabelaInterna.put("scanf", ClasseToken.FUNC_SCANF);
 
@@ -66,7 +67,8 @@ public class TabelaInterna {
 		tabelaInterna.put("||", ClasseToken.OP_OU);
 		tabelaInterna.put("&&", ClasseToken.OP_E);
 
-		tabelaInterna.put("&", ClasseToken.OP_E_BINARIO);
+		//operadores epesciais
+		tabelaInterna.put("&", ClasseToken.OP_E_COMERCIAL);
 		tabelaInterna.put("|", ClasseToken.OP_OU_BINARIO);
 
 		// operadores aritimeticos

@@ -96,7 +96,11 @@ public class AnalisadorLexico {
 		posXInit = posColuna;
 		posYInit = posLinha;
 
-		if (Character.isLetter(charBuff) || charBuff == '_') {
+		if (Character.isLetter(charBuff) || charBuff == '_' || charBuff == '#') {
+			if(charBuff == '_' || charBuff == '#'){
+				lexema += charBuff;
+				lerBuffer();
+			}
 			while (Character.isLetterOrDigit(charBuff)) {
 				lexema += charBuff;
 				lerBuffer();
@@ -116,7 +120,11 @@ public class AnalisadorLexico {
 			if (TabelaInterna.contains(lexema)) {
 				classe = TabelaInterna.getTokenClass(lexema.toLowerCase());
 			} else {
-				classe = ClasseToken.ID;
+				if(charBuff == '('){
+					classe = ClasseToken.ID_FUNCTION;
+				}else {
+					classe = ClasseToken.ID;
+				}
 			}
 		} else if (Character.isDigit(charBuff)) {
 			int quantPonto = 0;
