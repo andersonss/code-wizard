@@ -29,16 +29,8 @@ public class AnalisadorSintatico {
 	public void runAnaliseSintatica() throws UndefinedSintaxeException {
 		lerProximoToken();
 		while (token != null) {
-			if (token.getClasseToken() == ClasseToken.VOID) {
-				lerProximoToken();
-				if (token.getClasseToken() == ClasseToken.ID_FUNCTION) {
-					lerProximoToken();
-				} else {
-					throw new UndefinedSintaxeException(token.toString());
-				}
-				analisarBloco();
-			} else if (token.getClasseToken() == ClasseToken.TIPO
-					|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
+			if (token.getClasseToken() == ClasseToken.TIPO
+					|| token.getClasseToken() == ClasseToken.FUNC_MAIN || token.getClasseToken() == ClasseToken.VOID) {
 				lerProximoToken();
 				if (token.getClasseToken() == ClasseToken.ID_FUNCTION
 						|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 int main()
-
 {
 
     int g=0,d=0,j=0,m=0,n,b,k,i,a[100000],p=0,f;
