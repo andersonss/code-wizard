@@ -11,6 +11,9 @@ import java.util.List;
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
 import br.ufal.ic.compiladores.token.Token;
+import br.ufal.ic.ctree.CTree;
+import br.ufal.ic.ctree.ICTree;
+import br.ufal.ic.ctree.NodeType;
 
 public class Main {
 
@@ -38,7 +41,9 @@ public class Main {
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
-	    analisador.runAnaliseSintatica();
+	    CTree tree = new CTree(NodeType.ROOT);
+	    analisador.runAnaliseSintatica(tree);
+	    
 	} catch (FileNotFoundException e) {
 	    System.err.println("Arquivo Nao Encontrado!");
 	    e.printStackTrace();

@@ -4,6 +4,10 @@ import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
 import br.ufal.ic.compiladores.token.ClasseToken;
 import br.ufal.ic.compiladores.token.Token;
+import br.ufal.ic.ctree.CNode;
+import br.ufal.ic.ctree.CTree;
+import br.ufal.ic.ctree.ICTree;
+import br.ufal.ic.ctree.NodeType;
 
 public class AnalisadorSintatico {
 	private Token token;
@@ -26,19 +30,32 @@ public class AnalisadorSintatico {
 	 * 
 	 * @throws UndefinedSintaxeException
 	 */
-	public void runAnaliseSintatica() throws UndefinedSintaxeException {
+	public void runAnaliseSintatica(CTree rootNode) throws UndefinedSintaxeException {
 		lerProximoToken();
 		while (token != null) {
 			if (token.getClasseToken() == ClasseToken.TIPO
 					|| token.getClasseToken() == ClasseToken.FUNC_MAIN || token.getClasseToken() == ClasseToken.VOID) {
+				
+				switch (token.getClasseToken()) {
+				case TIPO:
+				case VOID:
+					rootNode.addNode(new CTree(NodeType.DCL_FUNC));
+					break;
+				case FUNC_MAIN:
+					rootNode.addNode(new CTree(NodeType.DCL_MAIN));
+				default:
+					break;
+				}
+				
 				lerProximoToken();
 				
 				if(token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA){
+					CNode node = new CNode(token);
 					lerProximoToken();
-				}
-				if (token.getClasseToken() == ClasseToken.ID_FUNCTION
-						|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
-					lerProximoToken();
+					if (token.getClasseToken() == ClasseToken.ID_FUNCTION
+							|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
+						lerProximoToken();
+					}
 				}
 				analisarBloco();
 				if (token.getClasseToken() == ClasseToken.RETURN) {
