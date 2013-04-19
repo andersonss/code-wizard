@@ -30,20 +30,20 @@ public class Main {
 	path.add("rsc/soma-fracoes.c");
 
 	// Rodar apenas a analise lexica ou a analise sintatica!
-	//rodarAnaliseLexica(path);
-	 rodarAnaliseSintatica(path);
+	// rodarAnaliseLexica(path);
+	rodarAnaliseSintatica(path);
 
     }
 
     private static void rodarAnaliseSintatica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(4)));
+	    FileReader reader = new FileReader(new File(path.get(1)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
 	    CTree tree = new CTree(NodeType.ROOT);
 	    analisador.runAnaliseSintatica(tree);
-	    
+
 	} catch (FileNotFoundException e) {
 	    System.err.println("Arquivo Nao Encontrado!");
 	    e.printStackTrace();
@@ -59,7 +59,7 @@ public class Main {
 
     private static void rodarAnaliseLexica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(4)));
+	    FileReader reader = new FileReader(new File(path.get(1)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    Token token = AnalisadorLexico.nextToken();
