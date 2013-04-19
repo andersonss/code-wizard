@@ -34,7 +34,7 @@ public class Main {
 
     private static void rodarAnaliseSintatica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(3)));
+	    FileReader reader = new FileReader(new File(path.get(4)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
