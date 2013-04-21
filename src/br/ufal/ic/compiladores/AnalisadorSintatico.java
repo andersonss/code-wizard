@@ -6,7 +6,6 @@ import br.ufal.ic.compiladores.token.ClasseToken;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CNode;
 import br.ufal.ic.ctree.CTree;
-import br.ufal.ic.ctree.ICTree;
 import br.ufal.ic.ctree.NodeType;
 
 public class AnalisadorSintatico {
@@ -31,88 +30,94 @@ public class AnalisadorSintatico {
 	 * @throws UndefinedSintaxeException
 	 */
 	public void runAnaliseSintatica(CTree rootNode)
-	    throws UndefinedSintaxeException {
-	lerProximoToken();
-	while (token != null) {
-	    if (token.getClasseToken() == ClasseToken.TIPO
-		    || token.getClasseToken() == ClasseToken.FUNC_MAIN
-		    || token.getClasseToken() == ClasseToken.VOID) {
-
-	    	CTree nodeDclFunc = new CTree(NodeType.DCL_FUNC);
-		    rootNode.addNode(nodeDclFunc);
-		    nodeDclFunc.addNode(new CNode(token));
-		    
+			throws UndefinedSintaxeException {
+		CTree nodeDclFunc = null;
 		lerProximoToken();
+		while (token != null) {
+			if (token.getClasseToken() == ClasseToken.TIPO
+					|| token.getClasseToken() == ClasseToken.FUNC_MAIN
+					|| token.getClasseToken() == ClasseToken.VOID) {
 
-		if (token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA) {
-			nodeDclFunc.addNode(new CNode(token));
-			lerProximoToken();
-		}
-		if (token.getClasseToken() == ClasseToken.ID_FUNCTION
-			|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
-			nodeDclFunc.addNode(new CNode(token));
-			lerProximoToken();
-		}
-		analisarBloco(nodeDclFunc);
-		if (token.getClasseToken() == ClasseToken.RETURN) {
-		    lerProximoToken();
-		    exprLogica();
-		    if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
-			lerProximoToken();
-		    } else {
-			throw new UndefinedSintaxeException(token.toString());
-		    }
-		}
-	    } else if (token.getClasseToken() == ClasseToken.INCLUDE) {
-		lerProximoToken();
-		if (token.getClasseToken() == ClasseToken.OP_MENOR
-			|| token.getClasseToken() == ClasseToken.ASPA_DUPLA) {
-		    lerProximoToken();
-		    if (token.getClasseToken() == ClasseToken.ID) {
-			lerProximoToken();
-			if (token.getClasseToken() == ClasseToken.PONTO) {
-			    lerProximoToken();
-			    if (token.getClasseToken() == ClasseToken.ID) {
+				nodeDclFunc = new CTree(NodeType.DCL_FUNC);
+				rootNode.addNode(nodeDclFunc);
+				nodeDclFunc.addNode(new CNode(token));
+
 				lerProximoToken();
-				if (token.getClasseToken() == ClasseToken.OP_MAIOR
-					|| token.getClasseToken() == ClasseToken.ASPA_DUPLA) {
-				    lerProximoToken();
-				    continue;
-				} else {
-				    throw new UndefinedSintaxeException(
-					    token.toString());
-				}
-			    } else {
-				throw new UndefinedSintaxeException(
-					token.toString());
-			    }
-			} else {
-			    throw new UndefinedSintaxeException(
-				    token.toString());
-			}
-		    } else {
-			throw new UndefinedSintaxeException(token.toString());
-		    }
-		} else {
-		    throw new UndefinedSintaxeException(token.toString());
-		}
-	    }
-	    if (token.getClasseToken() == ClasseToken.FCHAVE) {
-	 
-	    	lerProximoToken();
-	    } else {
-		throw new UndefinedSintaxeException(token.toString());
-	    }
-	}
-	System.out
-		.println("\n** Analise Sintatica concluida com sucesso! **\n-> Programa reconhecido!");
 
-    }
+				if (token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA) {
+					nodeDclFunc.addNode(new CNode(token));
+					lerProximoToken();
+				}
+				if (token.getClasseToken() == ClasseToken.ID_FUNCTION
+						|| token.getClasseToken() == ClasseToken.FUNC_MAIN) {
+					nodeDclFunc.addNode(new CNode(token));
+					lerProximoToken();
+				}
+				analisarBloco(nodeDclFunc);
+				if (token.getClasseToken() == ClasseToken.RETURN) {
+					nodeDclFunc.addNode(new CNode(token));
+					lerProximoToken();
+					CTree nodeExpr = new CTree(NodeType.EXPR);
+					nodeDclFunc.addNode(nodeExpr);
+					exprLogica(nodeExpr);
+					if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
+						nodeDclFunc.addNode(new CNode(token));
+						lerProximoToken();
+					} else {
+						throw new UndefinedSintaxeException(token.toString());
+					}
+				}
+			} else if (token.getClasseToken() == ClasseToken.INCLUDE) {
+				lerProximoToken();
+				if (token.getClasseToken() == ClasseToken.OP_MENOR
+						|| token.getClasseToken() == ClasseToken.ASPA_DUPLA) {
+					lerProximoToken();
+					if (token.getClasseToken() == ClasseToken.ID) {
+						lerProximoToken();
+						if (token.getClasseToken() == ClasseToken.PONTO) {
+							lerProximoToken();
+							if (token.getClasseToken() == ClasseToken.ID) {
+								lerProximoToken();
+								if (token.getClasseToken() == ClasseToken.OP_MAIOR
+										|| token.getClasseToken() == ClasseToken.ASPA_DUPLA) {
+									lerProximoToken();
+									continue;
+								} else {
+									throw new UndefinedSintaxeException(
+											token.toString());
+								}
+							} else {
+								throw new UndefinedSintaxeException(
+										token.toString());
+							}
+						} else {
+							throw new UndefinedSintaxeException(
+									token.toString());
+						}
+					} else {
+						throw new UndefinedSintaxeException(token.toString());
+					}
+				} else {
+					throw new UndefinedSintaxeException(token.toString());
+				}
+			}
+			if (token.getClasseToken() == ClasseToken.FCHAVE) {
+				nodeDclFunc.addNode(new CNode(token));
+				lerProximoToken();
+			} else {
+				throw new UndefinedSintaxeException(token.toString());
+			}
+		}
+		System.out
+				.println("\n** Analise Sintatica concluida com sucesso! **\n-> Programa reconhecido!");
+
+	}
 
 	/**
 	 * Captura a abertura e fechamento de parenteses na declaracao dos
 	 * parametros de cada funcao
-	 * @param nodeDclFunc 
+	 * 
+	 * @param nodeDclFunc
 	 */
 	private void analisarBloco(CTree nodeDclFunc) {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
@@ -125,7 +130,9 @@ public class AnalisadorSintatico {
 				if (token.getClasseToken() == ClasseToken.ACHAVE) {
 					nodeDclFunc.addNode(new CNode(token));
 					lerProximoToken();
-					instucaoList();
+					CTree instrucaoList = new CTree(NodeType.INTRUCOES);
+					nodeDclFunc.addNode(instrucaoList);
+					instucaoList(instrucaoList);
 				} else {
 					throw new UndefinedSintaxeException(token.toString());
 				}
@@ -139,65 +146,86 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Reconhecimento das intrucoes da linguagen
+	 * @param nodeInstrucaoList 
 	 * 
 	 */
-	private void instucaoList() {
+	private void instucaoList(CTree nodeInstrucaoList) {
 		switch (token.getClasseToken()) {
 		case TIPO:
+			CTree nodeDclVariavel = new CTree(NodeType.DCL_VAR);
+			nodeInstrucaoList.addNode(nodeDclVariavel);
+			nodeDclVariavel.addNode(new CNode(token));
 			lerProximoToken();
-			dclVariavel();
-			instucaoList();
+			dclVariavel(nodeDclVariavel);
+			instucaoList(nodeInstrucaoList);
 			break;
 		case ID_FUNCTION:
+			CTree nodeChamadaFunc = new CTree(NodeType.CHAMADA_FUNC);
+			nodeChamadaFunc.addNode(new CNode(token));
+			nodeInstrucaoList.addNode(nodeChamadaFunc);
 			lerProximoToken();
-			chamadaFuncao();
+			chamadaFuncao(nodeChamadaFunc);
 			if (token.getClasseToken() != ClasseToken.PONTO_VIRGULA) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeChamadaFunc.addNode(new CNode(token));
 			lerProximoToken();
-			instucaoList();
+			instucaoList(nodeInstrucaoList);
 			break;
 		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
 		case OP_ADICAO_ADICAO:
 		case OP_SUBTRACAO_SUBTRACAO:
+			nodeInstrucaoList.addNode(new CNode(token));
 			lerProximoToken();
 		case ID:
 			// Aqui foi fatorado a esquerda para identificar adequadamente qual
 			// producao usar..
-			instrucaoFatoradaId();
-			instucaoList();
+			nodeInstrucaoList.addNode(new CNode(token));
+			instrucaoFatoradaId(nodeInstrucaoList);
+			instucaoList(nodeInstrucaoList);
 			break;
 		case IF:
+			CTree nodeIf = new CTree(NodeType.IF);
+			nodeIf.addNode(new CNode(token));
+			nodeInstrucaoList.addNode(nodeIf);
 			lerProximoToken();
-			instrucaoIf();
-			instucaoList();
+			instrucaoIf(nodeIf);
+			instucaoList(nodeInstrucaoList);
 			break;
 		case WHILE:
+			CTree nodeWhile = new CTree(NodeType.WHILE);
+			nodeWhile.addNode(new CNode(token));
+			nodeInstrucaoList.addNode(nodeWhile);
 			lerProximoToken();
-			instrucaoWhile();
-			instucaoList();
+			instrucaoWhile(nodeWhile);
+			instucaoList(nodeInstrucaoList);
 			break;
 		case FOR:
+			CTree nodeFor = new CTree(NodeType.FOR);
+			nodeFor.addNode(new CNode(token));
+			nodeInstrucaoList.addNode(nodeFor);
 			lerProximoToken();
-			instrucaoFor();
-			instucaoList();
+			instrucaoFor(nodeFor);
+			instucaoList(nodeInstrucaoList);
 			break;
 		case FUNC_PRINTF:
+			//SENDO IGNORADA
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.APARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
 			lerProximoToken();
 			funcaoImprimir();
-			instucaoList();
+			instucaoList(nodeInstrucaoList);
 			break;
 		case FUNC_SCANF:
+			//SENDO IGNORADA
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.APARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
 			funcaoLer();
-			instucaoList();
+			instucaoList(nodeInstrucaoList);
 			break;
 		default:
 			break;
@@ -284,26 +312,37 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Reconhece a instrucao FOR
+	 * @param nodeFor 
 	 */
-	private void instrucaoFor() {
+	private void instrucaoFor(CTree nodeFor) {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
+			nodeFor.addNode(new CNode(token));
 			lerProximoToken();
-			atribuicao();
+			atribuicao(nodeFor);
 			if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
+				nodeFor.addNode(new CNode(token));
 				lerProximoToken();
-				exprLogica();
+				CTree exprL = new CTree(NodeType.EXPR);
+				nodeFor.addNode(exprL);
+				exprLogica(exprL);
 				if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
+					nodeFor.addNode(new CNode(token));
 					lerProximoToken();
-					exprAritmetica();
+					CTree expr = new CTree(NodeType.EXPR);
+					nodeFor.addNode(expr);
+					exprAritmetica(expr);
 					if (token.getClasseToken() == ClasseToken.FPARENTESE) {
+						nodeFor.addNode(new CNode(token));
 						lerProximoToken();
 						if (token.getClasseToken() == ClasseToken.ACHAVE) {
+							nodeFor.addNode(new CNode(token));
 							lerProximoToken();
-							instucaoList();
+							instucaoList(nodeFor);
 							if (token.getClasseToken() != ClasseToken.FCHAVE) {
 								throw new UndefinedSintaxeException(
 										token.toString());
 							}
+							nodeFor.addNode(new CNode(token));
 							lerProximoToken();
 						} else {
 							throw new UndefinedSintaxeException(
@@ -339,15 +378,20 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Reconhece a instrucao While
+	 * @param nodeWhile 
 	 */
-	private void instrucaoWhile() {
-		exprLogica();
+	private void instrucaoWhile(CTree nodeWhile) {
+		CTree exprL = new CTree(NodeType.EXPR);
+		nodeWhile.addNode(exprL);
+		exprLogica(exprL);
 		if (token.getClasseToken() == ClasseToken.ACHAVE) {
+			nodeWhile.addNode(new CNode(token));
 			lerProximoToken();
-			instucaoList();
+			instucaoList(nodeWhile);
 			if (token.getClasseToken() != ClasseToken.FCHAVE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeWhile.addNode(new CNode(token));
 			lerProximoToken();
 		} else {
 			throw new UndefinedSintaxeException(token.toString());
@@ -355,26 +399,36 @@ public class AnalisadorSintatico {
 	}
 
 	/**
-	 * Reconhece instrucao If-IfElse-Else
+	 * Reconhece instrucao If-ElseIf-Else
+	 * @param nodeIf 
 	 */
-	private void instrucaoIf() {
-		exprLogica();
+	private void instrucaoIf(CTree nodeIf) {
+		exprLogica(nodeIf);
 		if (token.getClasseToken() == ClasseToken.ACHAVE) {
+			nodeIf.addNode(new CNode(token));
 			lerProximoToken();
-			instucaoList();
+			CTree nodeInstrucao = new CTree(NodeType.INTRUCOES);
+			nodeIf.addNode(nodeInstrucao);
+			instucaoList(nodeInstrucao);
 			if (token.getClasseToken() != ClasseToken.FCHAVE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeIf.addNode(new CNode(token));
 			lerProximoToken();
 			while (token.getClasseToken() == ClasseToken.ELSE_IF) {
+				CTree nodeElseIf = new CTree(NodeType.ELSE_IF);
+				nodeIf.addNode(nodeElseIf);
+				nodeElseIf.addNode(new CNode(token));
 				lerProximoToken();
-				exprLogica();
+				exprLogica(nodeElseIf);
 				if (token.getClasseToken() == ClasseToken.ACHAVE) {
+					nodeElseIf.addNode(new CNode(token));
 					lerProximoToken();
-					instucaoList();
+					instucaoList(nodeElseIf);
 					if (token.getClasseToken() != ClasseToken.FCHAVE) {
 						throw new UndefinedSintaxeException(token.toString());
 					}
+					nodeElseIf.addNode(new CNode(token));
 					lerProximoToken();
 				} else {
 					throw new UndefinedSintaxeException(token.toString());
@@ -382,13 +436,17 @@ public class AnalisadorSintatico {
 			}
 
 			if (token.getClasseToken() == ClasseToken.ELSE) {
+				CTree nodeElse = new CTree(NodeType.ELSE);
+				nodeIf.addNode(nodeElse);
 				lerProximoToken();
 				if (token.getClasseToken() == ClasseToken.ACHAVE) {
+					nodeElse.addNode(new CNode(token));
 					lerProximoToken();
-					instucaoList();
+					instucaoList(nodeElse);
 					if (token.getClasseToken() != ClasseToken.FCHAVE) {
 						throw new UndefinedSintaxeException(token.toString());
 					}
+					nodeElse.addNode(new CNode(token));
 					lerProximoToken();
 				} else {
 					throw new UndefinedSintaxeException(token.toString());
@@ -402,10 +460,12 @@ public class AnalisadorSintatico {
 	/**
 	 * Existem algumas instrucoes que comecam com ID; Houve o fatoramento a
 	 * esquerda para a correta identificacao da instrucao
+	 * @param instrucaoList 
 	 */
-	private void instrucaoFatoradaId() {
-		atribuicao();
+	private void instrucaoFatoradaId(CTree instrucaoList) {
+		atribuicao(instrucaoList);
 		if (token.getClasseToken() == ClasseToken.PONTO_VIRGULA) {
+			instrucaoList.addNode(new CNode(token));
 			lerProximoToken();
 		} else {
 			throw new UndefinedSintaxeException(token.toString());
@@ -427,46 +487,59 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Fator aritmetico
+	 * @param nodeExpr 
 	 */
-	private void fatorAritmetico() {
+	private void fatorAritmetico(CTree nodeExpr) {
 		switch (token.getClasseToken()) {
 		case CADEIA_CARACTER:
 		case CARACTER:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			break;
 		case OP_NEGACAO:
 		case OP_SUBTRACAO:
 		case APARENTESE:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			exprLogica();
+			exprLogica(nodeExpr);
 			if (token.getClasseToken() != ClasseToken.FPARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			break;
 		case CONST_NUM:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			break;
 		case ID_FUNCTION:
+			CNode node = new CNode(token);
 			lerProximoToken();
-			chamadaFuncao();
+			CTree nodeChamadaFuncao = new CTree(NodeType.CHAMADA_FUNC);
+			nodeChamadaFuncao.addNode(node);
+			nodeExpr.addNode(nodeChamadaFuncao);
+			chamadaFuncao(nodeChamadaFuncao);
 			break;
 		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
 		case OP_REFERENCIA:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.ID) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			break;
 		case ID:
 			lerProximoToken();
 			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
-				lerProximoToken();
-				exprAritmetica();
+				nodeExpr.addNode(new CNode(token));
+				lerProximoToken();				
+				exprAritmetica(nodeExpr);
 				if (token.getClasseToken() != ClasseToken.FCOLCHETE) {
 					throw new UndefinedSintaxeException(token.toString());
 				}
+				nodeExpr.addNode(new CNode(token));
 				lerProximoToken();
 			}
 			break;
@@ -478,12 +551,16 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Reconhece chamada de funcoes
+	 * @param nodeChamadaFuncao 
 	 */
-	private void chamadaFuncao() {
+	private void chamadaFuncao(CTree nodeChamadaFuncao) {
 		if (token.getClasseToken() == ClasseToken.APARENTESE) {
+			nodeChamadaFuncao.addNode(new CNode(token));
 			lerProximoToken();
-			funcParamList();
+			
+			funcParamList(nodeChamadaFuncao);
 			if (token.getClasseToken() == ClasseToken.FPARENTESE) {
+				nodeChamadaFuncao.addNode(new CNode(token));
 				lerProximoToken();
 			} else {
 				throw new UndefinedSintaxeException(token.toString());
@@ -496,210 +573,251 @@ public class AnalisadorSintatico {
 	/**
 	 * Reconhecimento dos parametros de uma funcao. Aceita funcoes sem
 	 * parametros
+	 * @param nodeChamadaFuncao 
 	 */
-	private void funcParamList() {
+	private void funcParamList(CTree nodeChamadaFuncao) {
+		CTree nodeExpr = new CTree(NodeType.EXPR);
 		if (token.getClasseToken() == ClasseToken.FPARENTESE) {
+			//AKI TAMBÉM NÃO TINHA O LER TOKEN. ADICIONEI!
+			nodeChamadaFuncao.addNode(new CNode(token));
+			lerProximoToken();
 			return;
 		}
 		if (token.getClasseToken() == ClasseToken.OP_REFERENCIA
 				|| token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA) {
+			nodeChamadaFuncao.addNode(new CNode(token));
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.ID) {
 				throw new UndefinedSintaxeException(token.toString());
 			}
+			nodeChamadaFuncao.addNode(new CNode(token));
 			lerProximoToken();
 		} else {
-			exprLogica();
+			nodeChamadaFuncao.addNode(nodeExpr);
+			exprLogica(nodeExpr);
 		}
 		if (token.getClasseToken() == ClasseToken.VIRGULA) {
+			nodeChamadaFuncao.addNode(new CNode(token));
 			lerProximoToken();
-			exprLogica();
-			funcParamList();
+			nodeChamadaFuncao.addNode(nodeExpr);
+			exprLogica(nodeExpr);
+			funcParamList(nodeChamadaFuncao);
 		}
 	}
 
 	/**
 	 * Reconhece declaracao de variaveis
+	 * @param nodeDclVariavel 
 	 */
-	private void dclVariavel() {
-		dclList();
+	private void dclVariavel(CTree nodeDclVariavel) {
+		dclList(nodeDclVariavel);
 		if (token.getClasseToken() != ClasseToken.PONTO_VIRGULA) {
 			throw new UndefinedSintaxeException(token.toString());
 		}
+		nodeDclVariavel.addNode(new CNode(token));
 		lerProximoToken();
 
 	}
 
 	/**
 	 * Reconhece lista de variaveis
+	 * @param nodeDclVariavel 
 	 */
-	private void dclList() {
-		atribuicao();
-		dclL();
+	private void dclList(CTree nodeDclVariavel) {
+		atribuicao(nodeDclVariavel);
+		dclL(nodeDclVariavel);
 	}
 
 	/**
 	 * Mais de uma variavel declarada
+	 * @param nodeDclVariavel 
 	 */
-	private void dclL() {
+	private void dclL(CTree nodeDclVariavel) {
 		if (token.getClasseToken() == ClasseToken.VIRGULA) {
+			nodeDclVariavel.addNode(new CNode(token));
 			lerProximoToken();
-			dclList();
+			dclList(nodeDclVariavel);
 		}
 	}
 
-	private void atribuicao() {
-		atribuicaoAux();
+	private void atribuicao(CTree nodeDclVariavel) {
+		atribuicaoAux(nodeDclVariavel);
+		CTree nodeExpr = new CTree(NodeType.EXPR);
 		if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
+			nodeDclVariavel.addNode(new CNode(token));
 			lerProximoToken();
-			exprLogica();
+			nodeDclVariavel.addNode(nodeExpr);
+			exprLogica(nodeExpr);
 		} else {
-			termoUnarioAritmeticoPos();
+			nodeDclVariavel.addNode(nodeExpr);
+			termoUnarioAritmeticoPos(nodeExpr);
 		}
 
 	}
 
-	private void atribuicaoAux() {
+	private void atribuicaoAux(CTree nodeDclVariavel) {
 		if (token.getClasseToken() == ClasseToken.OP_MULTIPLICACAO_OU_DESREFERENCIA) {
+			nodeDclVariavel.addNode(new CNode(token));
 			lerProximoToken();
 		}
 		if (token.getClasseToken() == ClasseToken.ID) {
+			nodeDclVariavel.addNode(new CNode(token));
 			lerProximoToken();
 			if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
+				nodeDclVariavel.addNode(new CNode(token));
 				lerProximoToken();
-				exprAritmetica();
+				CTree nodeExpr = new CTree(NodeType.EXPR);
+				nodeDclVariavel.addNode(nodeExpr);
+				exprAritmetica(nodeExpr);
 				if (token.getClasseToken() != ClasseToken.FCOLCHETE) {
 					throw new UndefinedSintaxeException(token.toString());
 				}
+				nodeDclVariavel.addNode(new CNode(token));
 				lerProximoToken();
 			}
 		}
 
 	}
 
-	private void exprLogica() {
+	private void exprLogica(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.FPARENTESE) {
+			/**
+			 * MODIFIQUEI AKI, NAO TINHA ESSE LER PROXIMO TOKEN
+			 */
+			nodeExpr.addNode(new CNode(token));
+			lerProximoToken();
 			return;
 		}
-		termoLogico();
-		exprLogicaAux();
+		termoLogico(nodeExpr);
+		exprLogicaAux(nodeExpr);
 	}
 
-	private void termoLogico() {
-		exprRelacional();
-		termoLogicoAux();
+	private void termoLogico(CTree nodeExpr) {
+		exprRelacional(nodeExpr);
+		termoLogicoAux(nodeExpr);
 	}
 
-	private void exprRelacional() {
-		termoRelacional();
-		exprRelacionalAux();
+	private void exprRelacional(CTree nodeExpr) {
+		termoRelacional(nodeExpr);
+		exprRelacionalAux(nodeExpr);
 
 	}
 
-	private void termoRelacional() {
-		fatorRelacional();
+	private void termoRelacional(CTree nodeExpr) {
+		fatorRelacional(nodeExpr);
 	}
 
-	private void fatorRelacional() {
+	private void fatorRelacional(CTree nodeExpr) {
 		switch (token.getClasseToken()) {
 		case OP_NEGACAO:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			fatorRelacional();
+			fatorRelacional(nodeExpr);
 			break;
 		case BOOLEAN:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 			break;
 		default:
-			exprAritmetica();
-			termoRelacionalAux();
+			nodeExpr.addNode(new CNode(token));
+			exprAritmetica(nodeExpr);
+			termoRelacionalAux(nodeExpr);
 		}
 	}
 
-	private void termoRelacionalAux() {
+	private void termoRelacionalAux(CTree nodeExpr) {
 		switch (token.getClasseToken()) {
 		case OP_MAIOR:
 		case OP_MENOR:
 		case OP_MAIOR_IGUAL:
 		case OP_MENOR_IGUAL:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			exprAritmetica();
+			exprAritmetica(nodeExpr);
 			break;
 		default:
 			break;
 		}
 	}
 
-	private void exprRelacionalAux() {
+	private void exprRelacionalAux(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.OP_IGUAL_IGUAL
 				|| token.getClasseToken() == ClasseToken.OP_DIFERENTE) {
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			termoRelacional();
+			termoRelacional(nodeExpr);
 		}
 	}
 
-	private void termoLogicoAux() {
+	private void termoLogicoAux(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.OP_E) {
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			exprRelacional();
-			termoLogicoAux();
+			exprRelacional(nodeExpr);
+			termoLogicoAux(nodeExpr);
 		}
 	}
 
-	private void exprLogicaAux() {
+	private void exprLogicaAux(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.OP_OU) {
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			termoLogico();
-			exprLogicaAux();
+			termoLogico(nodeExpr);
+			exprLogicaAux(nodeExpr);
 		}
 	}
 
-	private void exprAritmetica() {
-		termoAritmetico();
-		exprAritmeticaAux();
+	private void exprAritmetica(CTree nodeExpr) {
+		termoAritmetico(nodeExpr);
+		exprAritmeticaAux(nodeExpr);
 	}
 
-	private void exprAritmeticaAux() {
+	private void exprAritmeticaAux(CTree nodeExpr) {
 		switch (token.getClasseToken()) {
 		case OP_ADICAO:
 		case OP_SUBTRACAO:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			termoAritmetico();
-			exprAritmeticaAux();
+			termoAritmetico(nodeExpr);
+			exprAritmeticaAux(nodeExpr);
 		default:
-			termoUnarioAritmeticoPos();
+			termoUnarioAritmeticoPos(nodeExpr);
 		}
 	}
 
-	private void termoAritmetico() {
-		termoUnarioAritmeticoPre();
-		termoArtimeticoAux();
+	private void termoAritmetico(CTree nodeExpr) {
+		termoUnarioAritmeticoPre(nodeExpr);
+		termoArtimeticoAux(nodeExpr);
 	}
 
-	private void termoUnarioAritmeticoPos() {
+	private void termoUnarioAritmeticoPos(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO
 				|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 		}
 	}
 
-	private void termoUnarioAritmeticoPre() {
+	private void termoUnarioAritmeticoPre(CTree nodeExpr) {
 		if (token.getClasseToken() == ClasseToken.OP_SUBTRACAO
 				|| token.getClasseToken() == ClasseToken.OP_ADICAO
 				|| token.getClasseToken() == ClasseToken.OP_ADICAO_ADICAO
 				|| token.getClasseToken() == ClasseToken.OP_SUBTRACAO_SUBTRACAO) {
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
 		}
-		fatorAritmetico();
+		fatorAritmetico(nodeExpr);
 	}
 
-	private void termoArtimeticoAux() {
+	private void termoArtimeticoAux(CTree nodeExpr) {
 		switch (token.getClasseToken()) {
 		case OP_MULTIPLICACAO_OU_DESREFERENCIA:
 		case OP_RESTO:
 		case OP_DIVISAO:
+			nodeExpr.addNode(new CNode(token));
 			lerProximoToken();
-			termoUnarioAritmeticoPre();
-			termoArtimeticoAux();
+			termoUnarioAritmeticoPre(nodeExpr);
+			termoArtimeticoAux(nodeExpr);
 		default:
 			break;
 		}
@@ -707,7 +825,8 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Declaracao dos parametros em uma declaracao de funcao
-	 * @param nodeDclFunc 
+	 * 
+	 * @param nodeDclFunc
 	 */
 	private void dclParamList(CTree nodeDclFunc) {
 		if (token.getClasseToken() == ClasseToken.TIPO) {
@@ -731,7 +850,8 @@ public class AnalisadorSintatico {
 
 	/**
 	 * Declaracao do parametro
-	 * @param nodeDclFunc 
+	 * 
+	 * @param nodeDclFunc
 	 */
 	private void dclParam(CTree nodeDclFunc) {
 		if (token.getClasseToken() == ClasseToken.ACOLCHETE) {
