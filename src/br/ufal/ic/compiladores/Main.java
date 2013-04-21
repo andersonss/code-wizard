@@ -37,12 +37,13 @@ public class Main {
 
     private static void rodarAnaliseSintatica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(1)));
+	    FileReader reader = new FileReader(new File(path.get(0)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
-	    CTree tree = new CTree(NodeType.ROOT);
+	    CTree tree = new CTree();
 	    analisador.runAnaliseSintatica(tree);
+	    tree.print();
 
 	} catch (FileNotFoundException e) {
 	    System.err.println("Arquivo Nao Encontrado!");
