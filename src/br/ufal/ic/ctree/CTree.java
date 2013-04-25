@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.ufal.ic.compiladores.tabela.TabelaDeAnalize;
+import br.ufal.ic.compiladores.tabela.TabelaDeAnalise;
 import br.ufal.ic.compiladores.token.ClasseToken;
 import br.ufal.ic.compiladores.token.Token;
 
@@ -64,7 +64,7 @@ public class CTree implements ICTree {
 	}
 
 	@Override
-	public void analyze(TabelaDeAnalize tabela) {
+	public void analyze(TabelaDeAnalise tabela) {
 		for(ICTree node : nosFilhos){
 			switch(node.getNodeType()){
 			case DCL_MAIN:

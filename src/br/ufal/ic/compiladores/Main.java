@@ -10,7 +10,7 @@ import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
-import br.ufal.ic.compiladores.tabela.TabelaDeAnalize;
+import br.ufal.ic.compiladores.tabela.TabelaDeAnalise;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
 
@@ -42,7 +42,7 @@ public class Main {
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
 	    CTree tree = new CTree();
 	    analisador.runAnaliseSintatica(tree);
-	    TabelaDeAnalize tabela1 = new TabelaDeAnalize();
+	    TabelaDeAnalise tabela1 = new TabelaDeAnalise();
 	    tree.analyze(tabela1);
 	    tree.print();
 	    System.out.println("\n\n**"+tabela1.toString());

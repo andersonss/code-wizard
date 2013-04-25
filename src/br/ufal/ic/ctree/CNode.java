@@ -1,6 +1,6 @@
 package br.ufal.ic.ctree;
 
-import br.ufal.ic.compiladores.tabela.TabelaDeAnalize;
+import br.ufal.ic.compiladores.tabela.TabelaDeAnalise;
 import br.ufal.ic.compiladores.token.Token;
 
 public class CNode implements ICTree {
@@ -28,7 +28,7 @@ public class CNode implements ICTree {
 	}
 
 	@Override
-	public void analyze(TabelaDeAnalize tabela) {
+	public void analyze(TabelaDeAnalise tabela) {
 		
 	}
 
