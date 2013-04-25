@@ -209,7 +209,9 @@ public class AnalisadorSintatico {
 			instucaoList(nodeInstrucaoList);
 			break;
 		case FUNC_PRINTF:
-			//SENDO IGNORADA
+			CTree nodePrintf = new CTree(nodeInstrucaoList, NodeType.PRINTF);
+			nodePrintf.addNode(new CNode (nodePrintf, token));
+			nodeInstrucaoList.addNode(nodePrintf);
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.APARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());
@@ -219,7 +221,9 @@ public class AnalisadorSintatico {
 			instucaoList(nodeInstrucaoList);
 			break;
 		case FUNC_SCANF:
-			//SENDO IGNORADA
+			CTree nodeScanf = new CTree(nodeInstrucaoList, NodeType.SCANF);
+			nodeScanf.addNode(new CNode (nodeScanf, token));
+			nodeInstrucaoList.addNode(nodeScanf);
 			lerProximoToken();
 			if (token.getClasseToken() != ClasseToken.APARENTESE) {
 				throw new UndefinedSintaxeException(token.toString());

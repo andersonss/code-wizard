@@ -3,7 +3,7 @@
 
 main()
 {
-      int a,b,c,d;
+      int a,b ,c,d;
       int multiplo,resp,frac1,frac2,total;
       scanf("%d/%d + %d/%d",&a,&b,&c,&d);
       if((b==0) || (d==0))

@@ -10,10 +10,9 @@ import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
+import br.ufal.ic.compiladores.tabela.TabelaDeAnalize;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
-import br.ufal.ic.ctree.ICTree;
-import br.ufal.ic.ctree.NodeType;
 
 public class Main {
 
@@ -37,13 +36,16 @@ public class Main {
 
     private static void rodarAnaliseSintatica(List<String> path) {
 	try {
-	    FileReader reader = new FileReader(new File(path.get(0)));
+	    FileReader reader = new FileReader(new File(path.get(3)));
 	    BufferedReader buffer = new BufferedReader(reader);
 	    AnalisadorLexico.setBuffer(buffer);
 	    AnalisadorSintatico analisador = new AnalisadorSintatico();
 	    CTree tree = new CTree();
 	    analisador.runAnaliseSintatica(tree);
+	    TabelaDeAnalize tabela1 = new TabelaDeAnalize();
+	    tree.analyze(tabela1);
 	    tree.print();
+	    System.out.println("\n\n**"+tabela1.toString());
 
 	} catch (FileNotFoundException e) {
 	    System.err.println("Arquivo Nao Encontrado!");
