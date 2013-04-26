@@ -16,67 +16,46 @@ import br.ufal.ic.ctree.CTree;
 
 public class Main {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
 
-	List<String> path = new ArrayList<String>();
-	path.add("rsc/3-numeros-em-ordem-crescente.c");
-	path.add("rsc/classificacao-triangulos-1.c");
-	path.add("rsc/classificacao-triangulos-2.c");
-	path.add("rsc/figurinhas-dos-irmaos.c");
-	path.add("rsc/soma-fracoes.c");
+		List<String> path = new ArrayList<String>();
+		path.add("rsc/3-numeros-em-ordem-crescente.c");
+		path.add("rsc/classificacao-triangulos-1.c");
+		path.add("rsc/classificacao-triangulos-2.c");
+		path.add("rsc/figurinhas-dos-irmaos.c");
+		path.add("rsc/soma-fracoes.c");
 
-	// Rodar apenas a analise lexica ou a analise sintatica!
-	// rodarAnaliseLexica(path);
-	rodarAnaliseSintatica(path);
+		rodarAnalise(path);
 
-    }
-
-    private static void rodarAnaliseSintatica(List<String> path) {
-	try {
-	    FileReader reader = new FileReader(new File(path.get(3)));
-	    BufferedReader buffer = new BufferedReader(reader);
-	    AnalisadorLexico.setBuffer(buffer);
-	    AnalisadorSintatico analisador = new AnalisadorSintatico();
-	    CTree tree = new CTree();
-	    analisador.runAnaliseSintatica(tree);
-	    TabelaDeAnalise tabela1 = new TabelaDeAnalise();
-	    tree.analyze(tabela1);
-	    tree.print();
-	    System.out.println("\n\n**"+tabela1.toString());
-
-	} catch (FileNotFoundException e) {
-	    System.err.println("Arquivo Nao Encontrado!");
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    System.err.println("Erro na leitura do arquivo!");
-	} catch (UndefinedSintaxeException e) {
-	    e.printStackTrace();
-	    System.err
-		    .println("\n** Falha na analise sintatica! **\n->Programa nao reconhecido!\nAlguma outra coisa esperada no lugar de "
-			    + e.getMessage());
-	}
-    }
-
-    private static void rodarAnaliseLexica(List<String> path) {
-	try {
-	    FileReader reader = new FileReader(new File(path.get(1)));
-	    BufferedReader buffer = new BufferedReader(reader);
-	    AnalisadorLexico.setBuffer(buffer);
-	    Token token = AnalisadorLexico.nextToken();
-	    while (token != null) {
-		System.out.println(token);
-		token = AnalisadorLexico.nextToken();
-	    }
-	} catch (FileNotFoundException e) {
-	    System.err.println("Arquivo Nao Encontrador!");
-	} catch (IOException e) {
-	    System.err.println("Erro na leitura do arquivo!");
-	} catch (UndefinedTokenException e) {
-	    System.err.println("Token Invalido! " + e.getMessage());
 	}
 
-    }
+	private static void rodarAnalise(List<String> path) {
+		try {
+			FileReader reader = new FileReader(new File(path.get(4)));
+			BufferedReader buffer = new BufferedReader(reader);
+			AnalisadorLexico.setBuffer(buffer);
+			AnalisadorSintatico analisador = new AnalisadorSintatico();
+			CTree tree = new CTree();
+			analisador.runAnaliseSintatica(tree);
+			TabelaDeAnalise tabela1 = new TabelaDeAnalise();
+			tree.analyze(tabela1);
+			tree.print();
+			System.out.println("\n\n**" + tabela1.toString());
+
+		} catch (FileNotFoundException e) {
+			System.err.println("Arquivo Nao Encontrado!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Erro na leitura do arquivo!");
+		} catch (UndefinedSintaxeException e) {
+			e.printStackTrace();
+			System.err
+					.println("\n** Falha na analise sintatica! **\n->Programa nao reconhecido!\nAlguma outra coisa esperada no lugar de "
+							+ e.getMessage());
+		}
+	}
+
 }

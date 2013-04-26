@@ -3,7 +3,7 @@ package br.ufal.ic.compiladores.tabela;
 public class TabelaDeAnalise {
 	
 	private int quantidadeDeFor = 0;
-	private int quantidadeDeWhiles = 0;
+	private int quantidadeDeWhile = 0;
 	private int quantidadeDeIf = 0;
 	private int quantidadeDeElseIf = 0;
 	private int quantidadeDeElse = 0;
@@ -43,11 +43,11 @@ public class TabelaDeAnalise {
 		this.quantidadeDeFor++;
 	}
 	public int getQuantidadeDeWhiles() {
-		return quantidadeDeWhiles;
+		return quantidadeDeWhile;
 	}
 	
 	public void incrementeQuantidadeDeWhiles() {
-		this.quantidadeDeWhiles++;
+		this.quantidadeDeWhile++;
 	}
 	public int getQuantidadeDeIf() {
 		return quantidadeDeIf;
@@ -87,8 +87,8 @@ public class TabelaDeAnalise {
 	}
 	@Override
 	public String toString() {
-		return "TabelaDeAnalize [quantidadeDeFor=" + quantidadeDeFor
-				+ ", quantidadeDeWhiles=" + quantidadeDeWhiles
+		return "TabelaDeAnalise [quantidadeDeFor=" + quantidadeDeFor
+				+ ", quantidadeDeWhiles=" + quantidadeDeWhile
 				+ ", quantidadeDeIf=" + quantidadeDeIf
 				+ ", quantidadeDeElseIf=" + quantidadeDeElseIf
 				+ ", quantidadeDeElse=" + quantidadeDeElse

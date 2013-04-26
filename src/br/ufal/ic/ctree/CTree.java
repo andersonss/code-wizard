@@ -45,14 +45,9 @@ public class CTree implements ICTree {
 	@Override
 	public void print() {
 		System.out.print("\nNoPai =>" + nodeType + " - ");
-		Iterator<ICTree> itr = nosFilhos.iterator();
-		while(itr.hasNext()){
-			ICTree node = itr.next();
+		for(ICTree node : nosFilhos){
 			node.print();
-
-		}
-		
-
+		}		
 	}
 
 	public int getProfundidade() {
