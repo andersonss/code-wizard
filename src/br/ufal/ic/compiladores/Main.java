@@ -6,11 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
-import br.ufal.ic.compiladores.tabela.TabelaDeAnalise;
 import br.ufal.ic.ctree.CTree;
+import br.ufal.ic.ctree.iterators.CTreeIterator;
 import br.ufal.ic.ctree.nosconcretos.RootNode;
 
 public class Main {
@@ -39,10 +40,8 @@ public class Main {
 			AnalisadorSintatico analisador = new AnalisadorSintatico();
 			CTree tree = new RootNode(null);
 			analisador.runAnaliseSintatica(tree);
-			TabelaDeAnalise tabela1 = new TabelaDeAnalise();
-			//tree.analyze(tabela1);
 			tree.print();
-			System.out.println("\n\n**" + tabela1.toString());
+
 
 		} catch (FileNotFoundException e) {
 			System.err.println("Arquivo Nao Encontrado!");

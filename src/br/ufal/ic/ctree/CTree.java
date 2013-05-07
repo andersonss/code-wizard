@@ -1,9 +1,8 @@
 package br.ufal.ic.ctree;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import br.ufal.ic.compiladores.token.Token;
 
 
 /**
@@ -42,6 +41,12 @@ public abstract class CTree {
 	public void addNode(CTree node){
 		this.nodeList.add(node);
 	}
+	
+	public Iterator iterator(){
+		return nodeList.iterator();
+	}
+	
+	
 	
 
 
