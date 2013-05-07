@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
-import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
 import br.ufal.ic.compiladores.tabela.TabelaDeAnalise;
-import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
+import br.ufal.ic.ctree.nosconcretos.RootNode;
 
 public class Main {
 
@@ -38,10 +37,10 @@ public class Main {
 			BufferedReader buffer = new BufferedReader(reader);
 			AnalisadorLexico.setBuffer(buffer);
 			AnalisadorSintatico analisador = new AnalisadorSintatico();
-			CTree tree = new CTree();
+			CTree tree = new RootNode(null);
 			analisador.runAnaliseSintatica(tree);
 			TabelaDeAnalise tabela1 = new TabelaDeAnalise();
-			tree.analyze(tabela1);
+			//tree.analyze(tabela1);
 			tree.print();
 			System.out.println("\n\n**" + tabela1.toString());
 
