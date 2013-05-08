@@ -28,9 +28,6 @@ public abstract class CTree {
 	
 	public void print(){
 		System.out.println("No = " + this.getClass() + "profundidade = " + profundidade);
-		for(CTree node : nodeList){
-			node.print();
-		}
 		
 	}
 	
@@ -42,7 +39,7 @@ public abstract class CTree {
 		this.nodeList.add(node);
 	}
 	
-	public Iterator iterator(){
+	public Iterator<CTree> iterator(){
 		return nodeList.iterator();
 	}
 	
