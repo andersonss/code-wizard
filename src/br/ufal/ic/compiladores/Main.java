@@ -11,7 +11,9 @@ import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.ctree.CTree;
+import br.ufal.ic.ctree.iterators.BreadthFirstIterator;
 import br.ufal.ic.ctree.iterators.CTreeIterator;
+import br.ufal.ic.ctree.iterators.DepthFirstIterator;
 import br.ufal.ic.ctree.nosconcretos.RootNode;
 
 public class Main {
@@ -40,7 +42,11 @@ public class Main {
 			AnalisadorSintatico analisador = new AnalisadorSintatico();
 			CTree tree = new RootNode(null);
 			analisador.runAnaliseSintatica(tree);
-			tree.print();
+			CTreeIterator iterator = new BreadthFirstIterator(tree);
+			//CTreeIterator iterator = new DepthFirstIterator(tree);
+			while(iterator.hasNext()){
+				iterator.next().print();
+			}
 
 
 		} catch (FileNotFoundException e) {

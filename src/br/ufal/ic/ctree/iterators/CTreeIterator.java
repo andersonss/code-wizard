@@ -8,10 +8,10 @@ import br.ufal.ic.ctree.CTree;
 public abstract class CTreeIterator implements Iterator<CTree> {
 
 
-	protected List<CTree> nodeList;
+	protected CTree rootNode;
 	
-	public CTreeIterator(List<CTree> nodeList) {
-		this.nodeList = nodeList;
+	public CTreeIterator(CTree rootNode) {
+		this.rootNode = rootNode;
 	}
 	
 }
