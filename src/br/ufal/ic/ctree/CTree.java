@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.ufal.ic.ctree.visitors.CTreeVisitor;
+
 
 /**
  * Essa classe implementa os atributos e metodos basicos para serem utilizados na arvore do codigo.
@@ -17,6 +19,7 @@ public abstract class CTree {
 	protected CTree noPai;
 	protected int profundidade = 0;
 	protected List<CTree> nodeList;
+	public abstract void accept(CTreeVisitor visitor);
 	
 	public CTree(CTree noPai){
 		if(noPai != null){
@@ -42,10 +45,5 @@ public abstract class CTree {
 	public Iterator<CTree> iterator(){
 		return nodeList.iterator();
 	}
-	
-	
-	
-
-
 
 }

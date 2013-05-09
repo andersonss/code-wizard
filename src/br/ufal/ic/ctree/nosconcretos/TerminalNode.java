@@ -5,6 +5,7 @@ import java.util.Iterator;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
 import br.ufal.ic.ctree.iterators.NullIterator;
+import br.ufal.ic.ctree.visitors.CTreeVisitor;
 
 public class TerminalNode extends CTree{
 
@@ -21,7 +22,12 @@ public class TerminalNode extends CTree{
 		super.print();
 	}
 	@Override
-	public Iterator iterator() {
+	public Iterator<CTree> iterator() {
 		return new NullIterator(null);
+	}
+
+	@Override
+	public void accept(CTreeVisitor visitor) {
+		visitor.visit(this);		
 	}
 }

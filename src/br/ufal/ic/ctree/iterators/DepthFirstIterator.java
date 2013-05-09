@@ -1,7 +1,6 @@
 package br.ufal.ic.ctree.iterators;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import br.ufal.ic.ctree.CTree;
