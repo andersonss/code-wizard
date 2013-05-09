@@ -15,6 +15,7 @@ import br.ufal.ic.ctree.iterators.BreadthFirstIterator;
 import br.ufal.ic.ctree.iterators.CTreeIterator;
 import br.ufal.ic.ctree.iterators.DepthFirstIterator;
 import br.ufal.ic.ctree.nosconcretos.RootNode;
+import br.ufal.ic.ctree.visitors.CounterAnalyzeVisitor;
 
 public class Main {
 
@@ -44,9 +45,12 @@ public class Main {
 			analisador.runAnaliseSintatica(tree);
 			CTreeIterator iterator = new BreadthFirstIterator(tree);
 			//CTreeIterator iterator = new DepthFirstIterator(tree);
+			CounterAnalyzeVisitor visitor1 = new CounterAnalyzeVisitor();
 			while(iterator.hasNext()){
-				iterator.next().print();
+				CTree aux = iterator.next();
+				aux.accept(visitor1);
 			}
+			visitor1.getTabelaDeAnalise().printLog();
 
 
 		} catch (FileNotFoundException e) {

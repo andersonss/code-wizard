@@ -2,6 +2,7 @@ package br.ufal.ic.ctree.nosconcretos;
 
 import java.util.Iterator;
 
+import br.ufal.ic.compiladores.token.ClasseToken;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
 import br.ufal.ic.ctree.iterators.NullIterator;
@@ -14,6 +15,14 @@ public class TerminalNode extends CTree{
 	public TerminalNode(CTree noPai, Token token) {
 		super(noPai);
 		this.token = token;
+	}
+	
+	public Token getToken(){
+		return this.token;
+	}
+	
+	public  ClasseToken getClasseToken(){
+		return this.token.getClasseToken();
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package br.ufal.ic.compiladores.tabela;
+package br.ufal.ic.ctree.visitors.analyzeobjects;
 
 public class TabelaDeAnalise {
 	
@@ -9,17 +9,25 @@ public class TabelaDeAnalise {
 	private int quantidadeDeElse = 0;
 	private int quantidadeDeFuncoes = 0;
 	private int quantidadeDeVariaveis = 0;
-	private int quantidadeDeNos = 0;
+	private int quantidadeDeNosTerminais = 0;
 	private int quantidadeDeScanf = 0;
 	private int quantidadeDePrintf = 0;
+	private int quantidadeDeChamadasDeFuncoes = 0;
 	private int profundidade = 0;
 	
+	
+	public int getQuantidadeDeChamadasDeFuncoes() {
+		return quantidadeDeChamadasDeFuncoes;
+	}
+	public void incrementeQuantidadeDeChamadasDeFuncoes() {
+		this.quantidadeDeChamadasDeFuncoes++;
+	}
 	
 	public int getQuantidadeDeVariaveis() {
 		return quantidadeDeVariaveis;
 	}
-	public void incrementeQuantidadeDeVariaveis(int quant) {
-		this.quantidadeDeVariaveis +=quant;
+	public void incrementeQuantidadeDeVariaveis() {
+		this.quantidadeDeVariaveis++;
 	}
 	
 	public int getQuantidadeDeScanf() {
@@ -32,7 +40,7 @@ public class TabelaDeAnalise {
 	public int getQuantidadeDePrinf() {
 		return quantidadeDePrintf;
 	}
-	public void incrementeQuantidadeDePrinf() {
+	public void incrementeQuantidadeDePrintf() {
 		this.quantidadeDePrintf++;
 	}
 	
@@ -74,10 +82,10 @@ public class TabelaDeAnalise {
 		this.quantidadeDeFuncoes++;
 	}
 	public int getQuantidadeDeNos() {
-		return quantidadeDeNos;
+		return quantidadeDeNosTerminais;
 	}
-	public void incrementeQuantidadeDeNos() {
-		this.quantidadeDeNos++;
+	public void incrementeQuantidadeDeNosTerminais() {
+		this.quantidadeDeNosTerminais++;
 	}
 	public int getProfundidade() {
 		return profundidade;
@@ -88,18 +96,22 @@ public class TabelaDeAnalise {
 	@Override
 	public String toString() {
 		return "TabelaDeAnalise [quantidadeDeFor=" + quantidadeDeFor
+				+ ", quantidadeDeChamadasDeFuncoes=" + quantidadeDeChamadasDeFuncoes
 				+ ", quantidadeDeWhiles=" + quantidadeDeWhile
 				+ ", quantidadeDeIf=" + quantidadeDeIf
 				+ ", quantidadeDeElseIf=" + quantidadeDeElseIf
 				+ ", quantidadeDeElse=" + quantidadeDeElse
 				+ ", quantidadeDeFuncoes=" + quantidadeDeFuncoes
 				+ ", quantidadeDeVariaveis=" + quantidadeDeVariaveis
-				+ ", quantidadeDeNos=" + quantidadeDeNos
+				+ ", quantidadeDeNosTerminais=" + quantidadeDeNosTerminais
 				+ ", quantidadeDeScanf=" + quantidadeDeScanf
 				+ ", quantidadeDePrintf=" + quantidadeDePrintf
 				+ ", profundidade=" + profundidade + "]";
 	}
-
+	
+	public void printLog(){
+		System.out.println(toString());
+	}
 	
 	
 	
