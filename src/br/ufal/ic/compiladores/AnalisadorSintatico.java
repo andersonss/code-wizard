@@ -648,15 +648,17 @@ public class AnalisadorSintatico {
 	}
 
 	private void atribuicao(CTree nodeDclVariavel) {
-		atribuicaoAux(nodeDclVariavel);
+		ExpressionNode exprAtbrNode = new ExpressionNode(nodeDclVariavel);
+		nodeDclVariavel.addNode(exprAtbrNode);
+		atribuicaoAux(exprAtbrNode);
 		if (token.getClasseToken() == ClasseToken.ATRIBUICAO) {
-			nodeDclVariavel.addNode(new TerminalNode(nodeDclVariavel,token));
+			exprAtbrNode.addNode(new TerminalNode(exprAtbrNode,token));
 			lerProximoToken();
-			CTree nodeExpr = new ExpressionNode(nodeDclVariavel);
-			nodeDclVariavel.addNode(nodeExpr);
+			CTree nodeExpr = new ExpressionNode(exprAtbrNode);
+			exprAtbrNode.addNode(nodeExpr);
 			exprLogica(nodeExpr);
 		} else {
-			termoUnarioAritmeticoPos(nodeDclVariavel);
+			termoUnarioAritmeticoPos(exprAtbrNode);
 		}
 
 	}

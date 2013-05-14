@@ -1,5 +1,6 @@
 package br.ufal.ic.ctree;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,10 +23,10 @@ public abstract class CTree {
 	public abstract void accept(CTreeVisitor visitor);
 	
 	public CTree(CTree noPai){
-		if(noPai != null){
-			this.profundidade = noPai.profundidade++;
-		}
 		this.noPai = noPai;
+		if(noPai != null){
+			this.profundidade = noPai.profundidade + 1;
+		}
 		nodeList = new LinkedList<CTree>();
 	}
 	
@@ -43,7 +44,9 @@ public abstract class CTree {
 	}
 	
 	public Iterator<CTree> iterator(){
-		return nodeList.iterator();
+		List<CTree> aux = new LinkedList<CTree>(nodeList);
+		Collections.reverse(aux);
+		return aux.iterator();
 	}
 
 }

@@ -6,16 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedSintaxeException;
 import br.ufal.ic.ctree.CTree;
-import br.ufal.ic.ctree.iterators.BreadthFirstIterator;
 import br.ufal.ic.ctree.iterators.CTreeIterator;
 import br.ufal.ic.ctree.iterators.DepthFirstIterator;
 import br.ufal.ic.ctree.nosconcretos.RootNode;
 import br.ufal.ic.ctree.visitors.CounterAnalyzeVisitor;
+import br.ufal.ic.ctree.visitors.ForAnalyzeVisitor;
 
 public class Main {
 
@@ -30,6 +29,7 @@ public class Main {
 		path.add("rsc/classificacao-triangulos-2.c");
 		path.add("rsc/figurinhas-dos-irmaos.c");
 		path.add("rsc/soma-fracoes.c");
+		path.add("rsc/test.txt");
 
 		rodarAnalise(path);
 
@@ -37,18 +37,21 @@ public class Main {
 
 	private static void rodarAnalise(List<String> path) {
 		try {
-			FileReader reader = new FileReader(new File(path.get(4)));
+			FileReader reader = new FileReader(new File(path.get(5)));
 			BufferedReader buffer = new BufferedReader(reader);
 			AnalisadorLexico.setBuffer(buffer);
 			AnalisadorSintatico analisador = new AnalisadorSintatico();
 			CTree tree = new RootNode(null);
 			analisador.runAnaliseSintatica(tree);
-			CTreeIterator iterator = new BreadthFirstIterator(tree);
-			//CTreeIterator iterator = new DepthFirstIterator(tree);
+			//CTreeIterator iterator = new BreadthFirstIterator(tree);
+			CTreeIterator iterator = new DepthFirstIterator(tree);
 			CounterAnalyzeVisitor visitor1 = new CounterAnalyzeVisitor();
+			ForAnalyzeVisitor visitor2 = new ForAnalyzeVisitor();
 			while(iterator.hasNext()){
 				CTree aux = iterator.next();
+				aux.print();
 				aux.accept(visitor1);
+				aux.accept(visitor2);
 			}
 			visitor1.getTabelaDeAnalise().printLog();
 
