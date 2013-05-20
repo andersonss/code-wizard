@@ -1,7 +1,12 @@
 package br.ufal.ic.ctree.visitors.analyzeobjects;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class TabelaDeAnalise {
 	
+	/* Armazena as linhas que possuem codigo */
+	private Set<Integer> linesOfCode;
 	private int quantidadeDeFor = 0;
 	private int quantidadeDeWhile = 0;
 	private int quantidadeDeIf = 0;
@@ -15,6 +20,9 @@ public class TabelaDeAnalise {
 	private int quantidadeDeChamadasDeFuncoes = 0;
 	private int profundidade = 0;
 	
+	public TabelaDeAnalise() {
+		linesOfCode = new HashSet<Integer>();
+	}
 	
 	public int getQuantidadeDeChamadasDeFuncoes() {
 		return quantidadeDeChamadasDeFuncoes;
@@ -93,6 +101,15 @@ public class TabelaDeAnalise {
 	public void setProfundidade(int profundidade) {
 		this.profundidade = this.profundidade < profundidade? profundidade : this.profundidade;
 	}
+	
+	public void addLineOfCode(int line){
+		this.linesOfCode.add(line);
+	}
+	
+	public int getLinesOfCode(){
+		return this.linesOfCode.size();
+	}
+	
 	@Override
 	public String toString() {
 		return "TabelaDeAnalise [quantidadeDeFor=" + quantidadeDeFor
@@ -102,6 +119,7 @@ public class TabelaDeAnalise {
 				+ ", quantidadeDeElseIf=" + quantidadeDeElseIf
 				+ ", quantidadeDeElse=" + quantidadeDeElse
 				+ ", quantidadeDeFuncoes=" + quantidadeDeFuncoes
+				+ ", quantidadeDeLinhasDeCodigo=" + getLinesOfCode()
 				+ ", quantidadeDeVariaveis=" + quantidadeDeVariaveis
 				+ ", quantidadeDeNosTerminais=" + quantidadeDeNosTerminais
 				+ ", quantidadeDeScanf=" + quantidadeDeScanf

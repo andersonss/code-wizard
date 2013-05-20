@@ -37,7 +37,7 @@ public class Main {
 
 	private static void rodarAnalise(List<String> path) {
 		try {
-			FileReader reader = new FileReader(new File(path.get(5)));
+			FileReader reader = new FileReader(new File(path.get(3)));
 			BufferedReader buffer = new BufferedReader(reader);
 			AnalisadorLexico.setBuffer(buffer);
 			AnalisadorSintatico analisador = new AnalisadorSintatico();
@@ -45,13 +45,12 @@ public class Main {
 			analisador.runAnaliseSintatica(tree);
 			//CTreeIterator iterator = new BreadthFirstIterator(tree);
 			CTreeIterator iterator = new DepthFirstIterator(tree);
+			iterator.setStartNode(1);
 			CounterAnalyzeVisitor visitor1 = new CounterAnalyzeVisitor();
-			ForAnalyzeVisitor visitor2 = new ForAnalyzeVisitor();
 			while(iterator.hasNext()){
 				CTree aux = iterator.next();
 				aux.print();
 				aux.accept(visitor1);
-				aux.accept(visitor2);
 			}
 			visitor1.getTabelaDeAnalise().printLog();
 

@@ -12,7 +12,6 @@ public class DepthFirstIterator extends CTreeIterator {
 	public DepthFirstIterator(CTree node) {
 		super(node);
 		stack = new Stack<CTree>();
-		stack.add(rootNode);
 	}
 
 	@Override
@@ -36,6 +35,20 @@ public class DepthFirstIterator extends CTreeIterator {
 	public void remove() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setStartNode(int nodeId) {
+		stack.clear();
+		stack.push(rootNode);
+		while(this.hasNext()){
+			CTree aux = this.next();
+			if(aux.getNodeId() == nodeId){
+				stack.clear();
+				stack.push(aux);
+				break;
+			}
+		}
 	}
 
 }

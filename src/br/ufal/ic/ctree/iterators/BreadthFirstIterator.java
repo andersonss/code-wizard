@@ -13,7 +13,6 @@ public class BreadthFirstIterator extends CTreeIterator {
 	public BreadthFirstIterator(CTree node) {
 		super(node);
 		queue = new LinkedList<CTree>();
-		queue.add(rootNode);
 	}
 
 	@Override
@@ -37,6 +36,20 @@ public class BreadthFirstIterator extends CTreeIterator {
 	public void remove() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setStartNode(int nodeId) {
+		queue.clear();
+		queue.add(rootNode);
+		while(this.hasNext()){
+			CTree aux = this.next();
+			if(aux.getNodeId() == nodeId){
+				queue.clear();
+				queue.add(aux);
+				break;
+			}
+		}	
 	}
 
 }

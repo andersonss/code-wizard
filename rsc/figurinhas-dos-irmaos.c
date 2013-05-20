@@ -1,12 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 int *testando (int *x, int *y){
 	*x = 20;
 }
 int main()
 {
-
     int g=0,d=0,j=0,m=0,n,b,k,i,a[100000],p=0,f,*g;
     a[100000]=0;
 	a = &p;
@@ -22,7 +18,6 @@ int main()
             n++;
 			++n;
         }
-
         if(b%2==0 && b!=0)
         {
             g++;
@@ -33,7 +28,6 @@ int main()
             d++;
             m=m+b;
         }
-
         while(k<=i)
         {
             if(a[k]==b)
@@ -46,16 +40,10 @@ int main()
                 else if (b%2!=0 && b!=0)
                 {
                     m=m-b;
-
                 }
-
             }
-
             k++;
         }
-
-
-
     a[p]=b;
     p++;
     }
@@ -64,10 +52,9 @@ int main()
       f=j;
     }
     else
-    {
+	{
         f=m;
     }
-
 printf("%d\n%d\n%d",g,d,f);
 }
 

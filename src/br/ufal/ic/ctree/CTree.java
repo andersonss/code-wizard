@@ -16,8 +16,10 @@ import br.ufal.ic.ctree.visitors.CTreeVisitor;
  *
  */
 public abstract class CTree {
-	
+
+	private static int IDCOUNTER = 0;
 	protected CTree noPai;
+	protected int tokenId;
 	protected int profundidade = 0;
 	protected List<CTree> nodeList;
 	public abstract void accept(CTreeVisitor visitor);
@@ -25,13 +27,16 @@ public abstract class CTree {
 	public CTree(CTree noPai){
 		this.noPai = noPai;
 		if(noPai != null){
+			this.tokenId = ++this.IDCOUNTER;
 			this.profundidade = noPai.profundidade + 1;
 		}
+		
 		nodeList = new LinkedList<CTree>();
 	}
 	
+	
 	public void print(){
-		System.out.println("No = " + this.getClass() + "profundidade = " + profundidade);
+		System.out.println("No = " + this.getClass() + "profundidade = " + profundidade + " Id = " + tokenId);
 		
 	}
 	
@@ -47,6 +52,10 @@ public abstract class CTree {
 		List<CTree> aux = new LinkedList<CTree>(nodeList);
 		Collections.reverse(aux);
 		return aux.iterator();
+	}
+	
+	public int getNodeId(){
+		return this.tokenId;
 	}
 
 }

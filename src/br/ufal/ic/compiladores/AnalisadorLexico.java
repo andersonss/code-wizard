@@ -2,6 +2,8 @@ package br.ufal.ic.compiladores;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
 import br.ufal.ic.compiladores.tabela.TabelaInterna;
@@ -26,7 +28,7 @@ public class AnalisadorLexico {
 	/* delimitar os caracteres aceitos pela linguagem */
 	private static final int ASCII_INI = 32;
 	private static final int ASCII_FIM = 126;
-
+	
 	public static void setBuffer(BufferedReader buffer) throws IOException {
 		AnalisadorLexico.buffer = buffer;
 		charBuff = (char) buffer.read();
@@ -188,5 +190,5 @@ public class AnalisadorLexico {
 		}
 
 		return new Token(classe, lexema, posYInit, posXInit);
-	}
+	}	
 }

@@ -5,9 +5,19 @@ import br.ufal.ic.compiladores.exceptions.UndefinedTokenException;
 import br.ufal.ic.compiladores.token.ClasseToken;
 import br.ufal.ic.compiladores.token.Token;
 import br.ufal.ic.ctree.CTree;
-import br.ufal.ic.ctree.nosconcretos.*;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeType;
+import br.ufal.ic.ctree.nosconcretos.ElseIfNode;
+import br.ufal.ic.ctree.nosconcretos.ElseNode;
+import br.ufal.ic.ctree.nosconcretos.ExpressionNode;
+import br.ufal.ic.ctree.nosconcretos.ForNode;
+import br.ufal.ic.ctree.nosconcretos.FunctionCallNode;
+import br.ufal.ic.ctree.nosconcretos.FunctionDeclarationNode;
+import br.ufal.ic.ctree.nosconcretos.IfNode;
+import br.ufal.ic.ctree.nosconcretos.PrintNode;
+import br.ufal.ic.ctree.nosconcretos.ScanNode;
+import br.ufal.ic.ctree.nosconcretos.StatementsNode;
+import br.ufal.ic.ctree.nosconcretos.TerminalNode;
+import br.ufal.ic.ctree.nosconcretos.VariableDeclarationNode;
+import br.ufal.ic.ctree.nosconcretos.WhileNode;
 
 
 public class AnalisadorSintatico {
@@ -442,6 +452,7 @@ public class AnalisadorSintatico {
 			if (token.getClasseToken() == ClasseToken.ELSE) {
 				CTree nodeElse = new ElseNode(nodeIf);
 				nodeIf.addNode(nodeElse);
+				nodeElse.addNode(new TerminalNode(nodeElse,token));
 				lerProximoToken();
 				if (token.getClasseToken() == ClasseToken.ACHAVE) {
 					nodeElse.addNode(new TerminalNode(nodeElse,token));

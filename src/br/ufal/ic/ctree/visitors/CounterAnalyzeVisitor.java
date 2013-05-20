@@ -25,6 +25,7 @@ public class CounterAnalyzeVisitor implements CTreeVisitor {
 	private TabelaDeAnalise tabela;
 	
 	
+	
 	public TabelaDeAnalise getTabelaDeAnalise(){
 		return tabela;
 	}
@@ -99,7 +100,7 @@ public class CounterAnalyzeVisitor implements CTreeVisitor {
 	public void visit(TerminalNode node) {
 		tabela.incrementeQuantidadeDeNosTerminais();
 		tabela.setProfundidade(node.getProfundidade());
-		
+		tabela.addLineOfCode(node.getToken().getPosLinha());
 	}
 
 	@Override

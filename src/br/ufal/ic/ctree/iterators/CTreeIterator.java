@@ -8,9 +8,12 @@ public abstract class CTreeIterator implements Iterator<CTree> {
 
 
 	protected CTree rootNode;
+	protected CTree startNode;
 	
 	public CTreeIterator(CTree rootNode) {
 		this.rootNode = rootNode;
 	}
+
+	public abstract void setStartNode(int nodeId);
 	
 }

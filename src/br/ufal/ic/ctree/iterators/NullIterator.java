@@ -25,4 +25,9 @@ public class NullIterator extends CTreeIterator {
 
 	}
 
+	@Override
+	public void setStartNode(int nodeId) {
+		
+	}
+
 }
